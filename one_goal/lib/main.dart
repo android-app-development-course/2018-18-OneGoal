@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:one_goal/SplashPage.dart';
 import 'package:one_goal/GoalNamePage.dart';
+import 'package:one_goal/GoalTemplatePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/rendering.dart';
 import 'package:one_goal/Slping.dart';
@@ -18,9 +19,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: new Sleeping(),
+      home: new GoalNamePage(),
       routes: <String, WidgetBuilder>{
         //'/HomePage': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
+        '/goalnamepage': (context) => GoalNamePage(),
+        '/goaltemplatepage': (context) => GoalTemplatePage()
       }
     );
   }
