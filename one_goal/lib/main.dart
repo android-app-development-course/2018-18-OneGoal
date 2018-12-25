@@ -4,8 +4,8 @@ import 'package:one_goal/GoalNamePage.dart';
 import 'package:one_goal/GoalTemplatePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/rendering.dart';
-import 'package:one_goal/ReadingPlan.dart';
-import 'package:one_goal/Slping.dart';
+import 'package:one_goal/WeightPlanPage.dart';
+import 'package:one_goal/SleepingPlanPage.dart';
 import 'package:one_goal/ReadingPlanPage.dart';
 
 void main() {
