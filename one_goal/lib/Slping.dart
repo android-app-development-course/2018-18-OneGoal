@@ -12,7 +12,8 @@ class Sleeping extends StatefulWidget
 
 class SleepingState extends State<Sleeping> {
 
-    DateTime clickDate=DateTime.now();
+    DateTime clickDate=new DateTime.now();
+    TimeOfDay clickTime=new TimeOfDay.now();
     int mission=0;
     int maxmission=100;
 
@@ -63,7 +64,7 @@ class SleepingState extends State<Sleeping> {
                       onTap: () {
                         print('点击');
                       },
-                      title: new Text('12306', style: new TextStyle(fontWeight: FontWeight.w500)),
+                      title: new Text(clickTime.toString().substring(10,15), style: new TextStyle(fontWeight: FontWeight.w500)),
                       leading: new Icon(
                         Icons.access_alarms,
                         color: Colors.blue[500],
@@ -74,7 +75,7 @@ class SleepingState extends State<Sleeping> {
                       onTap: () {
                         print('点击');
                       },
-                      title: new Text('12306gw@china-mor.gov.cn', style: new TextStyle(fontWeight: FontWeight.w500)),
+                      title: new Text(clickDate.toString().substring(0,10), style: new TextStyle(fontWeight: FontWeight.w500)),
                       leading: new Icon(
                         Icons.airline_seat_individual_suite,
                         color: Colors.blue[500],
@@ -91,7 +92,7 @@ class SleepingState extends State<Sleeping> {
                           onPressed:showDate,
                           color: Colors.lightBlueAccent,//按钮的背景颜色
                           padding: EdgeInsets.all(10.100),//按钮距离里面内容的内边距
-                          child: new Text('日期'),
+                          child: new Text('确定'),
                           textColor: Colors.black,//文字的颜色
                           textTheme:ButtonTextTheme.normal ,//按钮的主题
                           onHighlightChanged: (bool b){//水波纹高亮变化回调
@@ -112,7 +113,7 @@ class SleepingState extends State<Sleeping> {
                           elevation: 5.0,//按钮下面的阴影
                         ),
                         new RaisedButton(
-                          onPressed:showDate,
+                          onPressed:showTime,
                           color: Colors.lightBlueAccent,//按钮的背景颜色
                           padding: EdgeInsets.all(10.100),//按钮距离里面内容的内边距
                           child: new Text('时间'),
@@ -136,7 +137,7 @@ class SleepingState extends State<Sleeping> {
     }
 
     Future<Null> seclectTime(BuildContext context) async{
-          final DateTime pick=await showDatePicker(context: context,
+           DateTime pick=await showDatePicker(context: context,
               initialDate: clickDate,
               firstDate: new DateTime(2017),
               lastDate: new DateTime(2050));
@@ -148,9 +149,21 @@ class SleepingState extends State<Sleeping> {
           }
     }
 
+    Future<Null> seclectTime2(BuildContext context) async{
+       TimeOfDay pick=await showTimePicker(context: context, initialTime: new TimeOfDay.now());
+      if(pick!=null){
+        setState(() {
+          clickTime=pick;
+        });
+      }
+    }
 
     void showDate(){
       seclectTime(context);
+    }
+
+    void showTime(){
+      seclectTime2(context);
     }
 }
 
