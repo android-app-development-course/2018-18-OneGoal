@@ -3,6 +3,7 @@ import 'package:one_goal/SplashPage.dart';
 import 'package:one_goal/GoalNamePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/rendering.dart';
+import 'package:one_goal/Slping.dart';
 
 void main() {
   //debugPaintSizeEnabled = true;
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: new GoalNamePage(),
+      home: new Sleeping(),
       routes: <String, WidgetBuilder>{
         //'/HomePage': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
       }
