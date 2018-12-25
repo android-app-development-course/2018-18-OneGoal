@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:one_goal/SplashPage.dart';
+import 'package:one_goal/GoalNamePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/rendering.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  //debugPaintSizeEnabled = true;
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -12,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: new SplashPage(),
+      home: new GoalNamePage(),
       routes: <String, WidgetBuilder>{
         //'/HomePage': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
       }
