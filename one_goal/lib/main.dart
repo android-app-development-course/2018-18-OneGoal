@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/rendering.dart';
 import 'package:one_goal/ReadingPlan.dart';
 import 'package:one_goal/Slping.dart';
+import 'package:one_goal/ReadingPlanPage.dart';
 
 void main() {
   //debugPaintSizeEnabled = true;
@@ -20,11 +21,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-<<<<<<< HEAD
-      home: new Reading(),
-=======
-      home: new GoalNamePage(),
->>>>>>> bcfb76a055ec01fd692268178c34c902fc2bc525
+      home: new ReadingPlanPage(),
+
       routes: <String, WidgetBuilder>{
         //'/HomePage': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
         '/goalnamepage': (context) => GoalNamePage(),
