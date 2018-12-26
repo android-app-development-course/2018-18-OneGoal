@@ -8,9 +8,11 @@ import 'package:one_goal/WeightPlanPage.dart';
 import 'package:one_goal/SleepingPlanPage.dart';
 import 'package:one_goal/ReadingPlanPage.dart';
 import 'package:one_goal/ReadingNoteDetailPage.dart';
+import 'package:one_goal/Model.dart';
 
-void main() {
-  debugPaintSizeEnabled = true;
+void main() async {
+  //debugPaintSizeEnabled = true;
+  await Model().init();   // fixme: weird explicit initialization
   runApp(MyApp());
 }
 
@@ -22,52 +24,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: new ReadingNoteDetailPage(),
-      routes: <String, WidgetBuilder>{
+      home: new SplashPage(),
+      routes: <String, WidgetBuilder> {
         //'/HomePage': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
         '/goalnamepage': (context) => GoalNamePage(),
         '/goaltemplatepage': (context) => GoalTemplatePage()
       }
     );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new MaterialButton(
-              onPressed: _reset,
-              child: new Icon(Icons.minimize),
-              color: Colors.blue,
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  //test 用于重启后进入引导页面，可以用一个按钮来调用
-  void _reset() async
-  {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    sp.setBool("isGuidePage", false);
   }
 }

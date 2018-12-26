@@ -55,8 +55,7 @@ Widget _backgroundStack(Widget widget) {
   return new Stack(
     children: <Widget>[
       Image.asset("image/start_background2.jpg",    // fixme: unable to fill the image
-          fit: BoxFit.fitWidth,
-        alignment: FractionalOffset.center,
+          fit: BoxFit.cover,
       ),
       widget
     ],

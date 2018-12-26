@@ -4,15 +4,13 @@ import 'package:path/path.dart';
 import 'package:one_goal/ModelReadingNote.dart';
 
 class Model {
-  static final Model _model = new Model._internal();
+  static Model _model = Model._internal();
   factory Model() {
     return _model;
   }
-  Model._internal() {
-    _init();
-  }
+  Model._internal();
 
-  _init() async {
+  Future<void> init() async {
     _sharedPreferences = await SharedPreferences.getInstance();
     readingNoteProvider = new ReadingNoteProvider();
     var databasePath = await getDatabasesPath();
@@ -20,6 +18,7 @@ class Model {
   }
 
   static const String _INITIALIZED = 'initialized';
+  static const String _GOAL_NAME = 'goal_name';
   static const String _GOAL_TYPE = 'goal_type';
   static const String _BEGIN_TIME = 'begin_time';
   static const String _END_TIME = 'end_time';
@@ -54,6 +53,13 @@ class Model {
 
   void setGoalType(String str) {
     _sharedPreferences.setString(_GOAL_TYPE, str);
+  }
+  String getGoalName() {
+    return _sharedPreferences.getString(_GOAL_NAME) ?? NOT_INITIALIZED;
+  }
+
+  void setGoalName(String str) {
+    _sharedPreferences.setString(_GOAL_NAME, str);
   }
 
   DateTime getBeginTime() {

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'package:one_goal/main.dart';
+import 'package:one_goal/GoalNamePage.dart';
 import 'package:one_goal/GuidePage.dart';
+import 'package:one_goal/Model.dart';
 
 class SplashPage extends StatefulWidget
 {
@@ -29,7 +31,7 @@ class SplashPageState extends State<SplashPage>
   void initState()
   {
     super.initState();
-    getIsGuidePage();
+    isGuidePage = Model().isInitializing();
     //开启倒计时
     var duration = Duration(seconds: 3);
     new Future.delayed(duration, goToHomePage);
@@ -49,61 +51,20 @@ class SplashPageState extends State<SplashPage>
       if(isGuidePage)
       {//跳转主页，销毁当前页面
         Navigator.of(context).pushAndRemoveUntil(
-            new MaterialPageRoute(builder: (context) => new MyHomePage(title: 'One Goal')),
+            new MaterialPageRoute(builder: (context) => new GoalNamePage()),
             (Route route) => route ==null
         );
       }
       else
       {//跳转引导页，销毁当前页面
         Navigator.of(context).pushAndRemoveUntil(
-            new MaterialPageRoute(builder: (context) => new GuidePage()),
+            new MaterialPageRoute(builder: (context) => new GoalNamePage()),
             (Route route) => route ==null
         );
-        setIsGuidePage();
+        Model().setInitialized();
       }
       isStartHomePage = true;
     }
   }
 
-  void getIsGuidePage() async
-  {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    var temp = sp.getBool("isGuidePage");
-    setState(() {
-      isGuidePage = temp == null ? false : temp;
-    });
-  }
-
-  void setIsGuidePage() async
-  {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    sp.setBool("isGuidePage", isGuidePage);
-  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
