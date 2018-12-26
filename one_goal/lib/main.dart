@@ -8,9 +8,10 @@ import 'package:one_goal/WeightPlanPage.dart';
 import 'package:one_goal/SleepingPlanPage.dart';
 import 'package:one_goal/ReadingPlanPage.dart';
 import 'package:one_goal/ReadingNoteDetailPage.dart';
+import 'package:one_goal/Setting.dart';
 
 void main() {
-  debugPaintSizeEnabled = true;
+  debugPaintSizeEnabled = false;
   runApp(MyApp());
 }
 
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: new ReadingNoteDetailPage(),
+      home: new GoalTemplatePage(),
       routes: <String, WidgetBuilder>{
         //'/HomePage': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
         '/goalnamepage': (context) => GoalNamePage(),

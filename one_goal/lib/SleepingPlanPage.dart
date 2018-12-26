@@ -16,6 +16,8 @@ class SleepingState extends State<Sleeping> {
     TimeOfDay clickTime=new TimeOfDay.now();
     int mission=0;
     int maxmission=100;
+    String title="广东";
+    String content="家里，睡觉";
 
     Align _getNameText(BuildContext context, String text) {
       return new Align(
@@ -30,6 +32,20 @@ class SleepingState extends State<Sleeping> {
           )
       );
     }
+
+
+    void titleChange(String str){
+      setState(() {
+        title =str;
+      });
+    }
+
+    void titleChange2(String str){
+      setState(() {
+        content =str;
+      });
+    }
+
 
     @override
     Widget build(BuildContext context) {
@@ -48,15 +64,52 @@ class SleepingState extends State<Sleeping> {
 
                   new ListTile(
                       onTap: () {
-                        print('点击');
+                        showDialog<Null>(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return new AlertDialog(
+                              title:   new TextField(
+                                decoration: InputDecoration(
+                                  labelText: '标题',
+                                ),
+                                onChanged:titleChange,
+                            ),
+                              content: new SingleChildScrollView(
+                                child: new ListBody(
+                                  children: <Widget>[
+                                    new TextField(
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        prefixIcon: Icon(Icons.person),
+                                      ),
+                                      onChanged:titleChange2,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              actions: <Widget>[
+                                new FlatButton(
+                                  child: new Text('确定'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        ).then((val) {
+                          print(val);
+                        });
                       },
-                      title: new Text('广东', style: new TextStyle(fontWeight: FontWeight.w500)),
-                      subtitle: new Text('家里睡觉，日常'),
+                      title: new Text(title, style: new TextStyle(fontWeight: FontWeight.w500)),
+                      subtitle: new Text(content),
                       leading: new Icon(
                         Icons.business,
                         color: Colors.blue[500],
                       )
                   ),
+
 
                   new Divider(),
 
@@ -71,6 +124,8 @@ class SleepingState extends State<Sleeping> {
                       )
                   ),
 
+                  new Divider(),
+
                   new ListTile(
                       onTap: () {
                         print('点击');
@@ -84,6 +139,11 @@ class SleepingState extends State<Sleeping> {
 
                   new Divider(),
 
+
+                  new Padding(
+                    padding: const EdgeInsets.all(50.0),
+
+                  ),
                   new Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
