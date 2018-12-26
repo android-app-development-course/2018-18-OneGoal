@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'Model.dart';
 
 class GoalTemplatePage extends StatefulWidget {
   @override
@@ -10,11 +11,20 @@ class _TabState extends State<GoalTemplatePage>
     with SingleTickerProviderStateMixin {
 
   TabController _tabController;
+  TextEditingController _bookNameCtrl = TextEditingController();
+  TextEditingController _bookPageCtrl = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _tabController = new TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _bookNameCtrl.dispose();
+    _bookPageCtrl.dispose();
+    super.dispose();
   }
 
   @override
@@ -49,89 +59,99 @@ class _TabState extends State<GoalTemplatePage>
     );
   }
 
-}
-
-Widget _backgroundStack(Widget widget) {
-  return new Stack(
-    children: <Widget>[
-      Image.asset("image/start_background2.jpg",    // fixme: unable to fill the image
+  Widget _backgroundStack(Widget widget) {
+    return new Stack(
+      children: <Widget>[
+        Image.asset("image/start_background2.jpg",    // fixme: unable to fill the image
           fit: BoxFit.cover,
-      ),
-      widget
-    ],
-  );
-}
+        ),
+        widget
+      ],
+    );
+  }
 
-Widget _universalStack(Widget widget) {
-  return new Stack(
-    children: <Widget>[
-      Container(
-        margin: const EdgeInsets.only(bottom: 64),
-        alignment: Alignment.bottomCenter,
-        child: RaisedButton(
+  Widget _universalStack(Widget widget) {
+    return new Stack(
+      children: <Widget>[
+        Container(
+          margin: const EdgeInsets.only(bottom: 64),
+          alignment: Alignment.bottomCenter,
+          child: RaisedButton(
             onPressed: null,
-          child: Text(
-            'Next',
-            style: TextStyle(
-              fontSize: 32,
-              fontFamily: 'Lobster'
+            child: Text(
+              'Next',
+              style: TextStyle(
+                  fontSize: 32,
+                  fontFamily: 'Lobster'
+              ),
             ),
           ),
-        ),
-      )
-      , widget
-    ],
-  );
-}
-
-Widget _readingPlan() {
-  return new Container(
-    padding: EdgeInsets.fromLTRB(64.0, 64.0, 64.0, 0),
-    child: Column(
-      children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _labelConstructor("书名"),
-            Flexible(
-                child:TextField(
-                  decoration: InputDecoration(
-                      hintText: "请输入书名"
-                  ),
-                )
-            )
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _labelConstructor('页数'),
-            Flexible(
-              child: TextField(
-                decoration: InputDecoration(
-                    hintText: '请输入页数'
-                ),
-                keyboardType: TextInputType.number,
-                maxLength: 6,
-              ),
-            )
-
-          ],
         )
+        , widget
       ],
-    ),
-  );
-}
+    );
+  }
 
-Widget _labelConstructor(String str) {
-  return Container(
-    padding: EdgeInsets.only(right: 32),
-    child: Text(
-      str,
-      style: TextStyle(
-          fontSize: 18.0,
-          fontWeight: FontWeight.bold
+  Widget _readingPlan() {
+    return new Container(
+      padding: EdgeInsets.fromLTRB(64.0, 64.0, 64.0, 0),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              _labelConstructor("书名"),
+              Flexible(
+                  child:TextField(
+                    controller: _bookNameCtrl,
+                    decoration: InputDecoration(
+                        hintText: "请输入书名"
+                    ),
+                  )
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              _labelConstructor('页数'),
+              Flexible(
+                child: TextField(
+                  controller: _bookPageCtrl,
+                  decoration: InputDecoration(
+                      hintText: '请输入页数'
+                  ),
+                  keyboardType: TextInputType.number,
+                  maxLength: 6,
+                ),
+              )
+
+            ],
+          )
+        ],
       ),
-    ),
-  );
+    );
+  }
+
+  Widget _labelConstructor(String str) {
+    return Container(
+      padding: EdgeInsets.only(right: 32),
+      child: Text(
+        str,
+        style: TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold
+        ),
+      ),
+    );
+  }
+
+  void _gotoTimeSelectingPage() {
+    if (_tabController.index == 0) {  // reading plan is chosen
+      Model().setBookName(_bookNameCtrl.text);
+      Model().setBookPages(_bookPageCtrl.text);
+      // TODO: go to time selecting page
+      //Navigator.of(context)
+    }
+  }
 }
