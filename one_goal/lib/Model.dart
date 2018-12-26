@@ -37,6 +37,8 @@ class Model {
     return _sharedPreferences.getBool(_INITIALIZED) ?? false;
   }
 
+  // -------------- global settings begin ------------
+
   void setInitialized() {
     _sharedPreferences.setBool(_INITIALIZED, true);
   }
@@ -65,6 +67,11 @@ class Model {
     _sharedPreferences.setString(_END_TIME, end);
   }
 
+  // -------------- global settings end ------------
+
+  // -------------- Reading plan data access begin ------------
+
+
   String getBookName() {
     if (getGoalType() != READ) return TYPE_MISMATCH;
     return _sharedPreferences.getString(BOOK_NAME) ?? NOT_INITIALIZED;
@@ -74,11 +81,20 @@ class Model {
     _sharedPreferences.setString(BOOK_NAME, bookName);
   }
 
-  int getBookPages() {
-    if (getGoalType() != READ) return -1;
-    return int.parse(_sharedPreferences.getString(BOOK_PAGES) ?? "-2");
+  String getBookPages() {
+    if (getGoalType() != READ) return TYPE_MISMATCH;
+    return _sharedPreferences.getString(BOOK_PAGES) ?? NOT_INITIALIZED;
   }
 
-  
+  String setBookPages(String bookPages) {
+    _sharedPreferences.setString(BOOK_PAGES, bookPages);
+  }
+
+
+
+
+
+  // -------------- Reading plan data access end ------------
+
 
 }

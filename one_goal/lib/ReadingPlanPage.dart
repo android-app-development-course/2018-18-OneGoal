@@ -26,8 +26,8 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
         title: Text('读书计划'),
       ),
       body: Column(children: [
-        _progressBar(),
         Text(_getBookName()),
+        _progressBar(),
         _eventListView(),
         _addNoteButton(),
       ]),

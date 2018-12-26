@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:one_goal/WeightPlanPage.dart';
 import 'package:one_goal/SleepingPlanPage.dart';
 import 'package:one_goal/ReadingPlanPage.dart';
+import 'package:one_goal/ReadingNoteDetailPage.dart';
 
 void main() {
   debugPaintSizeEnabled = true;
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: new ReadingPlanPage(),
+      home: new ReadingNoteDetailPage(),
 
       routes: <String, WidgetBuilder>{
         //'/HomePage': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
