@@ -23,7 +23,13 @@ class SplashPageState extends State<SplashPage>
   Widget build(BuildContext context) {
     return new GestureDetector(
       onTap: goToHomePage,
-      child: Image.asset("image/splash_img.png", fit: BoxFit.cover),
+      child: ConstrainedBox(
+        child: Image.asset(
+          "image/splash_img.png",
+          fit:BoxFit.contain,
+        ),
+        constraints: new BoxConstraints.expand(),
+      ),
     );
   }
 

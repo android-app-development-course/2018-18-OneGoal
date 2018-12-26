@@ -10,6 +10,7 @@ import 'package:one_goal/ReadingPlanPage.dart';
 import 'package:one_goal/ReadingNoteDetailPage.dart';
 import 'package:one_goal/Setting.dart';
 import 'package:one_goal/Model.dart';
+import 'package:one_goal/GoalTimePage.dart';
 
 void main() async {
   //debugPaintSizeEnabled = true;

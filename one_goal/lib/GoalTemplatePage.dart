@@ -54,9 +54,19 @@ class _TabState extends State<GoalTemplatePage>
 Widget _backgroundStack(Widget widget) {
   return new Stack(
     children: <Widget>[
-      Image.asset("image/start_background2.jpg",    // fixme: unable to fill the image
+
+      ConstrainedBox(
+        child: Image.asset(
+          "image/start_background2.jpg",
           fit: BoxFit.cover,
+        ),
+        constraints: new BoxConstraints.expand(),
       ),
+
+
+     /* Image.asset("image/start_background2.jpg",    // fixme: unable to fill the image
+          fit: BoxFit.cover,
+      ),*/
       widget
     ],
   );
