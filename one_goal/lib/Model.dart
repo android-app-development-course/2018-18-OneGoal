@@ -1,6 +1,7 @@
-
 import 'package:sqflite/sqflite.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path/path.dart';
+import 'package:one_goal/ModelReadingNote.dart';
 
 class Model {
   static final Model _model = new Model._internal();
@@ -13,6 +14,9 @@ class Model {
 
   _init() async {
     _sharedPreferences = await SharedPreferences.getInstance();
+    readingNoteProvider = new ReadingNoteProvider();
+    var databasePath = await getDatabasesPath();
+    readingNoteProvider.open(join(databasePath, 'onegoal.db'));
   }
 
   static const String _INITIALIZED = 'initialized';
@@ -32,6 +36,7 @@ class Model {
 
 
   SharedPreferences _sharedPreferences;
+  ReadingNoteProvider readingNoteProvider;
 
   bool isInitializing() {
     return _sharedPreferences.getBool(_INITIALIZED) ?? false;
@@ -47,7 +52,7 @@ class Model {
     return _sharedPreferences.getString(_GOAL_TYPE) ?? NOT_INITIALIZED;
   }
 
-  String setGoalType(String str) {
+  void setGoalType(String str) {
     _sharedPreferences.setString(_GOAL_TYPE, str);
   }
 
@@ -86,11 +91,18 @@ class Model {
     return _sharedPreferences.getString(BOOK_PAGES) ?? NOT_INITIALIZED;
   }
 
-  String setBookPages(String bookPages) {
+  void setBookPages(String bookPages) {
     _sharedPreferences.setString(BOOK_PAGES, bookPages);
   }
 
+  void insertReadingNote(ReadingNote note) {
+    readingNoteProvider.insert(note);
+  }
 
+  Future<List<ReadingNote>> getAllReadingNotes() async {
+    List<ReadingNote> result = await readingNoteProvider.getReadingNotes();
+    return result;
+  }
 
 
 

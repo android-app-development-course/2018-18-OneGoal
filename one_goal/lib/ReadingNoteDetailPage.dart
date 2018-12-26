@@ -4,6 +4,7 @@ class ReadingNoteDetailPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _ReadingNodeDetailState();
 
+  ReadingNoteDetailPage({Key key}): super(key: key);
 }
 
 class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
@@ -27,6 +28,9 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
           _buildTitleTextField(),
           _buildTitle('内容'),
           _buildContentTextField(),
+          Spacer(   // fixme: push confirm button to the bottom of screen
+            flex: 2
+          ),
           _buildConfirmButton(),
         ],
       )),
@@ -63,7 +67,6 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
 
   Widget _buildConfirmButton() {
     return Container(
-      alignment: Alignment.bottomCenter,
         child:
         Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           RaisedButton(
@@ -84,7 +87,7 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
     return ListView.builder(
       scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
-
+          // TODO: feed images list data
         },
     );
   }
