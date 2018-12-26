@@ -20,11 +20,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-<<<<<<< HEAD
+
       home: new Reading(),
-=======
-      home: new GoalNamePage(),
->>>>>>> bcfb76a055ec01fd692268178c34c902fc2bc525
       routes: <String, WidgetBuilder>{
         //'/HomePage': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
         '/goalnamepage': (context) => GoalNamePage(),
