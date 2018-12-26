@@ -23,7 +23,6 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: new ReadingNoteDetailPage(),
-
       routes: <String, WidgetBuilder>{
         //'/HomePage': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
         '/goalnamepage': (context) => GoalNamePage(),
