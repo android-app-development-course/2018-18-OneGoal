@@ -8,6 +8,7 @@ import 'package:one_goal/WeightPlanPage.dart';
 import 'package:one_goal/SleepingPlanPage.dart';
 import 'package:one_goal/ReadingPlanPage.dart';
 import 'package:one_goal/ReadingNoteDetailPage.dart';
+import 'package:one_goal/Setting.dart';
 import 'package:one_goal/Model.dart';
 
 void main() async {
