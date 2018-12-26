@@ -38,17 +38,29 @@ class _TabState extends State<GoalTemplatePage>
         ),
         bottomOpacity: 1,
       ),
-      body: TabBarView(
+      body: _backgroundStack(TabBarView(
         children: <Widget>[
           _universalStack(_readingPlan()),
           new Text("test"),
           new Text("test"),
         ],
         controller: _tabController,
-      ),
+      )),
     );
   }
 
+}
+
+Widget _backgroundStack(Widget widget) {
+  return new Stack(
+    children: <Widget>[
+      Image.asset("image/start_background2.jpg",    // fixme: unable to fill the image
+          fit: BoxFit.fitWidth,
+        alignment: FractionalOffset.center,
+      ),
+      widget
+    ],
+  );
 }
 
 Widget _universalStack(Widget widget) {

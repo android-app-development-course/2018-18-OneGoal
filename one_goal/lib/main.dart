@@ -4,11 +4,12 @@ import 'package:one_goal/GoalNamePage.dart';
 import 'package:one_goal/GoalTemplatePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/rendering.dart';
-import 'package:one_goal/ReadingPlan.dart';
-import 'package:one_goal/Slping.dart';
+import 'package:one_goal/WeightPlanPage.dart';
+import 'package:one_goal/SleepingPlanPage.dart';
+import 'package:one_goal/ReadingPlanPage.dart';
 
 void main() {
-  //debugPaintSizeEnabled = true;
+  debugPaintSizeEnabled = true;
   runApp(MyApp());
 }
 
@@ -20,8 +21,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+<<<<<<< HEAD
 
       home: new Reading(),
+=======
+      home: new ReadingPlanPage(),
+
+>>>>>>> 11fde10a74bba9d8308d201f682c4aea50a3842a
       routes: <String, WidgetBuilder>{
         //'/HomePage': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
         '/goalnamepage': (context) => GoalNamePage(),
