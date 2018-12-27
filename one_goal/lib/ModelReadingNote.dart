@@ -57,18 +57,8 @@ class ReadingNote {
 
 class ReadingNoteProvider {
   Database db;
-  Future open(String path) async {
-    db = await openDatabase(path, version: 1,
-        onCreate: (Database db, int version) async {
-          await db.execute('''
-          create table $tableNote (
-            $columnId integer primary key autoincrement,
-            $columnTitle text not null,
-            $columnContent text)
-        ''');
-        }
-    );
-  }
+
+  ReadingNoteProvider(this.db);
 
   Future<ReadingNote> insert(ReadingNote note) async {
     note.id = await db.insert(tableNote, note.toMap());

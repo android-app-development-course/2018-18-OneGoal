@@ -13,17 +13,30 @@ class ReadingNoteDetailPage extends StatefulWidget {
 
 class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
   final int noteId;
-  String _title = " ";
-  String _content = " ";
-  TextEditingValue control;
+  String _title = "";
+  String _content = "";
+  TextEditingController _titleCtrl = new TextEditingController();
+  TextEditingController _contentCtrl = new TextEditingController();
 
   _ReadingNodeDetailState(this.noteId);
+
+  @override
+  void dispose() {
+    _titleCtrl.dispose();
+    _contentCtrl.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: _prepareData(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
+        ReadingNote note = snapshot.requireData;
+        if (note != null && note.id != null) {
+          _titleCtrl.text = note.title;
+          _contentCtrl.text = note.content;
+        }
         return !snapshot.hasData ? Center(child: CircularProgressIndicator()) :
         Scaffold(
           resizeToAvoidBottomPadding: false,
@@ -62,11 +75,8 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 32),
       child: TextField(
-        onSubmitted: (String str){
-          setState(() {
-            _title = str;
-          });
-        }
+        controller: _titleCtrl,
+        //onChanged: (String str) => _titleCtrl.text = str,
       ),
     );
   }
@@ -74,11 +84,12 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 32),
       child: TextField(
-        onChanged: (str) => _content = str,
+        controller: _contentCtrl,
+        //onChanged: (str) => _content = str,
         keyboardType: TextInputType.multiline,
         maxLines: 8,
         decoration: InputDecoration(
-          border: InputBorder.none
+          border: OutlineInputBorder()
         ),
       ),
     );
@@ -90,7 +101,7 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
         child:
         Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           RaisedButton(
-            onPressed: _title.isEmpty ? null
+            onPressed: _titleCtrl.text.isEmpty ? null
                 : () {
               _confirmAddNoteButtonPressed(context);
             },
@@ -117,8 +128,8 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
 
   void _confirmAddNoteButtonPressed(BuildContext context) {
     var newNote = new ReadingNote(
-        title: _title,
-        content: _content
+        title: _titleCtrl.text,
+        content: _contentCtrl.text
     );
     if (noteId == null) {
       Model().insertReadingNote(newNote);
@@ -130,11 +141,10 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
     Navigator.pop(context);
   }
 
-  Future<bool> _prepareData() async {
-    if (noteId == null) return true;
-    ReadingNote note = await Model().getReadingNote(noteId);
-    _title = note.title;
-    _content = note.content;
-    return true;
+  Future<ReadingNote> _prepareData() async {
+    if (noteId == null) return new ReadingNote();
+    return await Model().getReadingNote(noteId);
+    //_titleCtrl.text = note.title;
+    //_contentCtrl.text = note.content;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:one_goal/SettingRemain.dart';
 import 'package:one_goal/SettingFeedback.dart';
+import 'package:one_goal/SettingAbout.dart';
 
 class Setting extends StatefulWidget
 {
@@ -71,11 +72,13 @@ class SettingState extends State<Setting> {
 
               new ListTile(
                   onTap: () {
-                    print('点击');
+                    Navigator.push(context,
+                      new MaterialPageRoute(builder: (context) => new SettingAbout())
+                    );
                   },
-                  title: new Text("通用", style: new TextStyle(fontWeight: FontWeight.w500)),
+                  title: new Text("关于", style: new TextStyle(fontWeight: FontWeight.w500)),
                   leading: new Icon(
-                    Icons.apps,
+                    Icons.info_outline,
                     color: Colors.blue[500],
                   ),
                   trailing:new Icon(
@@ -86,43 +89,43 @@ class SettingState extends State<Setting> {
 
               new Divider(),
 
-              /*new ListTile(
-                  onTap: () {
-                    print('点击');
-                  },
-
-                  title: new Text("结束任务", style: new TextStyle(fontWeight: FontWeight.w500,color: Colors.red),),
-                  leading: new Icon(
-                    Icons.access_alarms,
-                    color: Colors.blue[500],
-                  )
+              new Container(
+                padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                child: new Column(
+                  children: <Widget>[
+                    new Row(
+                        children: <Widget>[
+                          new Expanded(
+                            child: new RaisedButton(
+                              onPressed: () => {},
+                              textColor: Colors.white,
+                              color: Colors.green,
+                              child: new Text("新建计划", style: new TextStyle(fontWeight: FontWeight.w500)),
+                            ),
+                          ),
+                        ]
+                    ),
+                    new Row(
+                        children: <Widget>[
+                          new Expanded(
+                            child: new RaisedButton(
+                              onPressed: () => {},
+                              textColor: Colors.white,
+                              color: Colors.red,
+                              child: new Text("结束计划", style: new TextStyle(fontWeight: FontWeight.w500)),
+                            ),
+                          ),
+                        ]
+                    ),
+                  ],
+                ),
               ),
-
-              new Divider(),*/
-
-              new Row(
-                children: <Widget>[
-                  new Expanded(
-                      child: new RaisedButton(
-                        onPressed: () => {},
-                        textColor: Colors.white,
-                        color: Colors.red,
-                        child: new Text("结束任务", style: new TextStyle(fontWeight: FontWeight.w500)),
-                      ),
-                  ),
-                ]
-              ),
-
-
-
 
             ],
           )
       ),
+      resizeToAvoidBottomPadding: false,
     );
-
-
-
   }
 
 }
