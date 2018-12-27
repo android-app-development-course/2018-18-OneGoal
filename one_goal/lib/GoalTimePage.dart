@@ -49,7 +49,7 @@ class TimeState extends State<GoalTimePage> {
               new Text(
                   'StartTime',
                   style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 40.0,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Lobster'
                   )
@@ -57,12 +57,13 @@ class TimeState extends State<GoalTimePage> {
 
                     new ListTile(
                         onTap: showDate2,
-                        title: new Text(StartDate.toString().substring(0,10), style: new TextStyle(fontWeight: FontWeight.w500)),
+                        title: new Text(StartDate.toString().substring(0,10), style: new TextStyle(fontSize: 20.0,fontWeight: FontWeight.w500)),
                         leading: new Icon(
                           Icons.airline_seat_individual_suite,
-                          color: Colors.blue[500],
+                          color: Colors.grey[500],
+                          size: 30,
                         ),
-                      trailing:new Text("选择开始时间", style: new TextStyle(fontWeight: FontWeight.w500)),
+                      trailing:new Text("选择开始时间", style: new TextStyle(fontSize: 15.0,fontWeight: FontWeight.w500)),
                     ),
 
 
@@ -83,7 +84,7 @@ class TimeState extends State<GoalTimePage> {
             new Text(
               'EndTime',
               style: TextStyle(
-                fontSize: 20.0,
+                fontSize: 40.0,
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Lobster'
               )
@@ -91,12 +92,13 @@ class TimeState extends State<GoalTimePage> {
 
                     new ListTile(
                         onTap:showDate,
-                        title: new Text(EndDate.toString().substring(0,10), style: new TextStyle(fontWeight: FontWeight.w500)),
+                        title: new Text(EndDate.toString().substring(0,10), style: new TextStyle(fontSize: 20.0,fontWeight: FontWeight.w500)),
                         leading: new Icon(
                           Icons.airline_seat_individual_suite,
-                          color: Colors.blue[500],
+                          color: Colors.grey[500],
+                          size: 30,
                         ),
-                        trailing:new Text("选择结束时间", style: new TextStyle(fontWeight: FontWeight.w500)),
+                        trailing:new Text("选择结束时间", style: new TextStyle(fontSize: 15.0,fontWeight: FontWeight.w500)),
                     ),
 
 
@@ -166,6 +168,7 @@ class TimeState extends State<GoalTimePage> {
         initialDate: new DateTime.now(),
         firstDate: new DateTime(2017),
         lastDate: new DateTime(2050));
+
 
     if(pick !=null){
       setState(() {

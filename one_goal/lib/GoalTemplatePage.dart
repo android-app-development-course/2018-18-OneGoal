@@ -106,6 +106,19 @@ Widget _backgroundStack(Widget widget) {
       padding: EdgeInsets.fromLTRB(64.0, 64.0, 64.0, 0),
       child: Column(
         children: <Widget>[
+
+          new Text(
+              'OneGoal',
+              style: TextStyle(
+                  fontSize: 48.0,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Lobster'
+              )),
+
+          Padding(
+            padding: EdgeInsets.all(20.0),
+          ),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[

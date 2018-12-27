@@ -71,6 +71,7 @@ class Model {
     _sharedPreferences.setString(_GOAL_NAME, str);
   }
 
+
   // --- time related begin ----
 
   DateTime getBeginDateTime() {
@@ -174,8 +175,12 @@ class Model {
   }
 
   Future<List<SleepingNote>> getAllSleepingNotes() async {
-    List<SleepingNote4DB> result = await sleepingNoteProvider.getSleepingNotes();
-    return result.map((s) => SleepingNote.fromSleepingNote4DB(s));
+    List<SleepingNote4DB> resultdb = await sleepingNoteProvider.getSleepingNotes();
+    var result = new List<SleepingNote>();
+    for (var i = 0; i != resultdb.length; ++i) {
+      result.add(SleepingNote.fromSleepingNote4DB(resultdb[i]));
+    }
+    return result;
   }
 
   Future<SleepingNote> getSleepingNote(int id) async {

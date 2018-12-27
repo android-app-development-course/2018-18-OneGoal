@@ -6,8 +6,8 @@ class Utilities {
   }
 
   static TimeOfDay string2Time(String str) {
-    List<int> hm = str.split("/").map((str) => int.parse(str));
+    List<String> hm = str.split("/");
     assert (hm.length == 2);
-    return TimeOfDay(hour: hm[0], minute: hm[1]);
+    return TimeOfDay(hour: int.parse(hm[0]), minute: int.parse(hm[1]));
   }
 }
