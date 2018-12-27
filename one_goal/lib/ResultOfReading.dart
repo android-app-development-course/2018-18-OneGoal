@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart'as charts;
+import 'package:one_goal/Model.dart';
 
 class ResultOfReading extends StatefulWidget
 {
@@ -20,9 +21,11 @@ class ResultOfReadingState extends State<ResultOfReading> {
   static List<charts.Series<TimeSeriesSales, DateTime>> _createSampleData(){
     final data = [
       new TimeSeriesSales(new DateTime(2017, 9, 19), 5),
-      new TimeSeriesSales(new DateTime(2017, 9, 26), 25),
-      new TimeSeriesSales(new DateTime(2017, 10, 3), 100),
-      new TimeSeriesSales(new DateTime(2017, 10, 10), 75),
+      new TimeSeriesSales(new DateTime(2017, 9, 26), 14),
+      new TimeSeriesSales(new DateTime(2017, 10, 3), 30),
+      new TimeSeriesSales(new DateTime(2017, 10, 10), 50),
+      new TimeSeriesSales(new DateTime(2017, 10, 15), 75),
+      new TimeSeriesSales(new DateTime(2017, 11, 18), 92),
     ];
 
     return [
@@ -40,6 +43,7 @@ class ResultOfReadingState extends State<ResultOfReading> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
+        backgroundColor: Colors.grey,
         title: new Text("读书计划"),
       ),
       body: new Container(
@@ -47,8 +51,12 @@ class ResultOfReadingState extends State<ResultOfReading> {
           child: new Column(
             children: <Widget>[
 
-              new Text("完成度显示"),
               new Container(
+                margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                child: new Text("完成度显示"),
+              ),
+              new Container(
+                  margin: EdgeInsets.fromLTRB(0, 0, 0, 30),
                   height: 300.0,
                   child: new charts.TimeSeriesChart(
                     seriesList,
@@ -56,17 +64,24 @@ class ResultOfReadingState extends State<ResultOfReading> {
                     dateTimeFactory: const charts.LocalDateTimeFactory(),)
               ),
 
-
-
+              new Text("开始时间："+dateTime2String(Model().getBeginDateTime())),
+              new Text("结束时间："+dateTime2String(Model().getEndDateTime())),
 
 
             ],
           )
       ),
     );
+  }
 
-
-
+  String dateTime2String(DateTime time)
+  {
+    return time.year.toString()+"-"
+        +time.month.toString()+"-"
+        +time.day.toString()+" "
+        +time.hour.toString()+":"
+        +time.minute.toString()+":"
+        +time.second.toString();
   }
 
 }

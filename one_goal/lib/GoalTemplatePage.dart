@@ -110,6 +110,14 @@ Widget _backgroundStack(Widget widget) {
       padding: EdgeInsets.fromLTRB(64.0, 64.0, 64.0, 0),
       child: Column(
         children: <Widget>[
+          new Text(
+            '读书计划',
+            style: TextStyle(
+                fontSize: 48.0,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Lobster'
+            ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -153,6 +161,14 @@ Widget _backgroundStack(Widget widget) {
       padding: EdgeInsets.fromLTRB(64.0, 100.0, 64.0, 0),
       child: Column(
         children: <Widget>[
+          new Text(
+            '睡觉计划',
+            style: TextStyle(
+                fontSize: 48.0,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Lobster'
+            ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -161,8 +177,8 @@ Widget _backgroundStack(Widget widget) {
                   child:RaisedButton(
                       onPressed: _selectTime,
                       child: _time == null ?
-                          new Text("点击输入时间", style: TextStyle(fontSize: 18),)
-                          : new Text(Utilities.time2String(_time), style: TextStyle(fontSize: 18),),
+                          new Text("点击输入时间", style: TextStyle(fontSize: 12),)
+                          : new Text(_time.hour.toString()+":"+_time.minute.toString(), style: TextStyle(fontSize: 18),),
                   )
               )
             ],
@@ -178,6 +194,14 @@ Widget _backgroundStack(Widget widget) {
       padding: EdgeInsets.fromLTRB(64.0, 100.0, 64.0, 0),
       child: Column(
         children: <Widget>[
+          new Text(
+            '体重计划',
+            style: TextStyle(
+                fontSize: 48.0,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Lobster'
+            ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -188,9 +212,10 @@ Widget _backgroundStack(Widget widget) {
                     decoration: InputDecoration(
                         hintText: "请输入目标体重"
                     ),
+                    keyboardType: TextInputType.number,
                   )
               ),
-              Text("kg"),
+              Text("kg", style: new TextStyle(fontSize: 18),),
             ],
           ),
         ],
