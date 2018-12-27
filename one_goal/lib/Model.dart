@@ -4,6 +4,7 @@ import 'package:one_goal/ModelReadingNote.dart';
 import 'package:flutter/material.dart';
 import 'ModelSleepingNote.dart';
 import 'package:one_goal/DatabaseInitializer.dart';
+import 'Utilities.dart';
 
 class Model {
   static Model _model = Model._internal();
@@ -93,20 +94,20 @@ class Model {
 
   TimeOfDay getBeginTimeOfDay() {
     String timeStr = _sharedPreferences.getString(_BEGIN_TIME_OF_DAY) ??
-        _time2String(TimeOfDay.now());
-    return _string2Time(timeStr);
+        Utilities.time2String(TimeOfDay.now());
+    return Utilities.string2Time(timeStr);
   }
   void setBeginTimeOfDay(TimeOfDay time) {
-    _sharedPreferences.setString(_BEGIN_TIME_OF_DAY, _time2String(time));
+    _sharedPreferences.setString(_BEGIN_TIME_OF_DAY, Utilities.time2String(time));
   }
 
   TimeOfDay getEndTimeOfDay() {
     String timeStr = _sharedPreferences.getString(_END_TIME_OF_DAY) ??
-        _time2String(TimeOfDay.now());
-    return _string2Time(timeStr);
+        Utilities.time2String(TimeOfDay.now());
+    return Utilities.string2Time(timeStr);
   }
   void setEndTimeOfDay(TimeOfDay time) {
-    _sharedPreferences.setString(_END_TIME_OF_DAY, _time2String(time));
+    _sharedPreferences.setString(_END_TIME_OF_DAY, Utilities.time2String(time));
   }
 
   // --- time related end ----
@@ -167,21 +168,21 @@ class Model {
   // -------------- Sleeping plan data access begin ------------
 
   void insertSleepingNote(SleepingNote note) {
-    sleepingNoteProvider.insert(note);  // fixme: need synchronize
+    sleepingNoteProvider.insert(note.toSleepingNote4DB());  // fixme: need synchronize
   }
 
   Future<List<SleepingNote>> getAllSleepingNotes() async {
-    List<SleepingNote> result = await sleepingNoteProvider.getSleepingNotes();
-    return result;
+    List<SleepingNote4DB> result = await sleepingNoteProvider.getSleepingNotes();
+    return result.map((s) => SleepingNote.fromSleepingNote4DB(s));
   }
 
   Future<SleepingNote> getSleepingNote(int id) async {
     var result = await sleepingNoteProvider.getSleepingNote(id);
-    return result;
+    return SleepingNote.fromSleepingNote4DB(result);
   }
 
   Future<int> updateSleepingNote(SleepingNote note) async {
-    return await sleepingNoteProvider.update(note);
+    return await sleepingNoteProvider.update(note.toSleepingNote4DB());
   }
 
 
@@ -197,17 +198,6 @@ class Model {
     return _sharedPreferences.getString(FREQUENCY);
   }
 
-  // ----------------- Setting data access start ------------
+  // ----------------- Setting data access end ------------
 
-
-  // -------------- private method  ------------
-  String _time2String(TimeOfDay time) {
-    return time.hour.toString() + "/" + time.minute.toString();
-  }
-
-  TimeOfDay _string2Time(String str) {
-    List<int> hm = str.split("/").map((str) => int.parse(str));
-    assert (hm.length == 2);
-    return TimeOfDay(hour: hm[0], minute: hm[1]);
-  }
 }
