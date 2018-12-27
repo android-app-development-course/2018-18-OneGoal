@@ -139,12 +139,21 @@ class Model {
   }
 
   void insertReadingNote(ReadingNote note) {
-    readingNoteProvider.insert(note);
+    readingNoteProvider.insert(note);  // TODO: synchronize
   }
 
   Future<List<ReadingNote>> getAllReadingNotes() async {
     List<ReadingNote> result = await readingNoteProvider.getReadingNotes();
     return result;
+  }
+
+  Future<ReadingNote> getReadingNote(int id) async {
+    var result = await readingNoteProvider.getReadingNote(id);
+    return result;
+  }
+
+  Future<int> updateReadingNote(ReadingNote note) async {
+    return await readingNoteProvider.update(note);
   }
 
 

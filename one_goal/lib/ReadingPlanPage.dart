@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:one_goal/Setting.dart';
 import 'ModelReadingNote.dart';
 import 'Model.dart';
+import 'ReadingNoteDetailPage.dart';
 
 class ReadingPlanPage extends StatefulWidget {
   @override
@@ -12,12 +13,10 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
   List<ReadingNote> notes;
 
   int _getBookPages() {
-    return 10;
     return int.parse(Model().getBookPages());
   }
 
   int _getCurrentPage() {
-    return 1;
     return int.parse(Model().getCurrentBookPages());
   }
 
@@ -28,10 +27,16 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
   @override
   Widget build(BuildContext context) {
     return new FutureBuilder(
-      future: Model().getAllReadingNotes().then((ns) => notes = ns),
+//      future: Model().getAllReadingNotes().then((ns) => notes = ns),
+        future: _mockDatabase(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           return snapshot.hasData ? _scaffold():
-            Center( child: Text(snapshot.toString())
+            Center( child: Text(
+                snapshot.toString(),
+              style: TextStyle(
+                fontSize: 10
+              ),
+            )  // TODO: change to progress bar
             );
         }
     );
@@ -39,6 +44,7 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
 
   Widget _scaffold() {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         backgroundColor: Colors.grey,
         title: Text('读书计划'),
@@ -46,25 +52,23 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
           new IconButton(
             color: Colors.white,
             icon: new Icon(Icons.settings),
-            onPressed: () => Navigator.of(context).push(
-                new MaterialPageRoute(builder: (context) => new Setting())
-            ),
+            onPressed: () => Navigator.of(context).pushNamed('/setting'),
             tooltip: '设置',
           ),
         ],
       ),
       body: Column(children: [
-        Text(_getBookName()),
+        Text(_getBookName()),   // fixme: needs beautify
         _progressBar(),
         _eventListView(),
-        _addNoteButton(),
+//        _addNoteButton(),
       ]),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
             child: Icon(Icons.create),
-            onPressed: () {},
+            onPressed: () => _onAddNoteButtonClicked(context),
           )
         ],
       ),
@@ -78,33 +82,47 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
     ]);
   }
 
-  void onAddNoteButtonClicked() {
+  void _onAddNoteButtonClicked(BuildContext context) {
+    Navigator.of(context).pushNamed('/readingnotedetailpage');
+  }
 
+  void _onNoteTileTapped(BuildContext context, int index) {
+    var note = notes[index];
+    Navigator.of(context).push(
+      new MaterialPageRoute(builder: (context) =>
+        new ReadingNoteDetailPage(note.id))
+    );
   }
 
   Widget _eventListView() {
-    return ListView.builder(
-      padding: const EdgeInsets.all(16.0),
-      itemCount: _mockEvents.length,
-      shrinkWrap: true,
-      itemBuilder: (BuildContext context, int index) {
-        return _buildEventListTile(index);
-      },
+    return Container(
+      height: 300,
+      child: ListView.builder(
+        padding: const EdgeInsets.all(16.0),
+        itemCount: notes.length,
+//      itemExtent: 30,
+//      shrinkWrap: true,
+        itemBuilder: _buildEventListTile,
+      )
     );
   }
 
-  Widget _buildEventListTile(int i) {
+  Widget _buildEventListTile(BuildContext context, int index) {
     return ListTile(
       leading: Icon(Icons.done),
-      title: Text(_mockEvents[i]),
+      title: Text(notes[index].title),
+      onTap: () => _onNoteTileTapped(context, index),
     );
   }
 
-  List<String> _mockEvents = [
-    "Start reading",
-    "Finish the first chapter",
-    "Done homework"
-  ];
+  Future<bool> _mockDatabase() async {
+    notes = await Model().getAllReadingNotes();
+    Model().setGoalType(Model.READ);
+    Model().setBookPages("32");
+    Model().setBookName("Test Book Name");
+    return true;
+  }
+
 
   Widget _addNoteButton() {
     return Expanded(

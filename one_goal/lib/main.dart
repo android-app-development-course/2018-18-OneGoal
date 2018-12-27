@@ -31,7 +31,10 @@ class MyApp extends StatelessWidget {
         //'/HomePage': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
         '/goalnamepage': (context) => GoalNamePage(),
         '/goaltemplatepage': (context) => GoalTemplatePage(),
-        '/goaltimepage': (context) => GoalTimePage()
+        '/goaltimepage': (context) => GoalTimePage(),
+        '/readingplanpage': (context) => ReadingPlanPage(),
+        '/readingnotedetailpage': (context) => ReadingNoteDetailPage(null),
+        '/setting': (context) => Setting(),
       }
     );
   }

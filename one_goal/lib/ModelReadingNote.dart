@@ -23,15 +23,35 @@ class ReadingNote {
     return map;
   }
 
-  static List<ReadingNote> fromMaps(List<Map<String, dynamic>> maps) {
-    return maps.map( (m) {
-      ReadingNote note = new ReadingNote();
-      note.id = m[columnId];
-      note.title = m[columnTitle];
-      note.content = m[columnContent];
-      return note;
-    }
+  static ReadingNote fromMap(Map<String, dynamic> singleMap) {
+    var note = new ReadingNote(
+      title: singleMap[columnTitle],
+      content: singleMap[columnContent]
     );
+    note.id = singleMap[columnId];
+    return note;
+  }
+
+  static List<ReadingNote> fromMaps(List<Map<String, dynamic>> maps) {
+    var newList = new List<ReadingNote>();
+    for (var i = 0; i != maps.length; ++i) {
+      var note = new ReadingNote();
+      var singleMap = maps[i];
+      note.id = singleMap[columnId];
+      note.title = singleMap[columnTitle];
+      note.content = singleMap[columnContent];
+      newList.add(note);
+    }
+    return newList;
+
+//    return maps.map( (m) {    // why does't it work??
+//      ReadingNote note = new ReadingNote();
+//      note.id = m[columnId];
+//      note.title = m[columnTitle];
+//      note.content = m[columnContent];
+//      return note;
+//    }
+//    );
   }
 }
 
@@ -64,6 +84,22 @@ class ReadingNoteProvider {
       return ReadingNote.fromMaps(maps);
     }
     return List<ReadingNote>();
+  }
+
+  Future<ReadingNote> getReadingNote(int id) async {
+    List<Map> maps = await db.query(tableNote,
+      columns: [columnId, columnTitle, columnContent],
+      where: "$columnId = ?",
+      whereArgs: [id]
+    );
+    if (maps.length > 0) return ReadingNote.fromMap(maps.first);
+    return null;
+  }
+
+  Future<int> update(ReadingNote note) async {
+    return await db.update(tableNote, note.toMap(),
+      where: '$columnId = ?', whereArgs: [note.id]
+    );
   }
 
 }
