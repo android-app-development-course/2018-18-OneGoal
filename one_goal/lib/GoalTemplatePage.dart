@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Model.dart';
+import 'Utilities.dart';
 
 class GoalTemplatePage extends StatefulWidget {
   @override
@@ -13,6 +14,9 @@ class _TabState extends State<GoalTemplatePage>
   TabController _tabController;
   TextEditingController _bookNameCtrl = TextEditingController();
   TextEditingController _bookPageCtrl = TextEditingController();
+  TextEditingController _weightCtrl = TextEditingController();
+
+  TimeOfDay _time;
 
   @override
   void initState() {
@@ -51,8 +55,8 @@ class _TabState extends State<GoalTemplatePage>
       body: _backgroundStack(TabBarView(
         children: <Widget>[
           _universalStack(_readingPlan()),
-          new Text("test"),
-          new Text("test"),
+          _universalStack(_sleepingPlan()),
+          _universalStack(_weightingPlan()),
         ],
         controller: _tabController,
       )),
@@ -143,6 +147,57 @@ Widget _backgroundStack(Widget widget) {
     );
   }
 
+  Widget _sleepingPlan()
+  {
+    return new Container(
+      padding: EdgeInsets.fromLTRB(64.0, 100.0, 64.0, 0),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              _labelConstructor("睡觉时间"),
+              Flexible(
+                  child:RaisedButton(
+                      onPressed: _selectTime,
+                      child: _time == null ?
+                          new Text("点击输入时间", style: TextStyle(fontSize: 18),)
+                          : new Text(Utilities.time2String(_time), style: TextStyle(fontSize: 18),),
+                  )
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _weightingPlan()
+  {
+    return new Container(
+      padding: EdgeInsets.fromLTRB(64.0, 100.0, 64.0, 0),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              _labelConstructor("体重"),
+              Flexible(
+                  child:TextField(
+                    controller: _weightCtrl,
+                    decoration: InputDecoration(
+                        hintText: "请输入目标体重"
+                    ),
+                  )
+              ),
+              Text("kg"),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _labelConstructor(String str) {
     return Container(
       padding: EdgeInsets.only(right: 32),
@@ -156,11 +211,35 @@ Widget _backgroundStack(Widget widget) {
     );
   }
 
+  void _selectTime() async
+  {
+    final TimeOfDay _picked = await showTimePicker(
+        context: context,
+        initialTime: new TimeOfDay.now(),
+    );
+
+    if(_picked != null)
+    {
+      setState(() {
+        _time = _picked;
+      });
+    }
+  }
+
   void _gotoTimeSelectingPage() {
     if (_tabController.index == 0) {  // reading plan is chosen
       Model().setBookName(_bookNameCtrl.text);
       Model().setBookPages(_bookPageCtrl.text);
-      Navigator.of(context).pushNamed('/goaltimepage');
+      Model().setGoalType("reading");
     }
+    else if (_tabController.index == 1) {  // reading plan is chosen
+
+      Model().setGoalType("sleeping");
+    }
+    else if (_tabController.index == 2) {  // reading plan is chosen
+
+      Model().setGoalType("weighting");
+    }
+    Navigator.of(context).pushNamed('/goaltimepage');
   }
 }

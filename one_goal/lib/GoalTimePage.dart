@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:one_goal/ReadingPlanPage.dart';
 
 class GoalTimePage extends StatefulWidget
 {
@@ -102,10 +103,9 @@ class TimeState extends State<GoalTimePage> {
 
 
               new RaisedButton(
-                onPressed: () {
-                },
+                onPressed: _finish,
                 child: Text(
-                  'Next',
+                  'Finish',
                   style: TextStyle(
                       fontSize: 32.0,
                       fontFamily: 'Lobster'
@@ -187,6 +187,12 @@ class TimeState extends State<GoalTimePage> {
     }
   }
 
-
+  void _finish()
+  {
+    Navigator.of(context).pushAndRemoveUntil(
+        new MaterialPageRoute(builder: (context) => new ReadingPlanPage()),
+            (Route route) => route ==null
+    );
+  }
 
 }
