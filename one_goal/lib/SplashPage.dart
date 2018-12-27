@@ -3,7 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'package:one_goal/main.dart';
 import 'package:one_goal/GoalNamePage.dart';
-import 'package:one_goal/GuidePage.dart';
 import 'package:one_goal/Model.dart';
 
 class SplashPage extends StatefulWidget
