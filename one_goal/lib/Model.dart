@@ -152,6 +152,7 @@ class Model {
 
   // -------------- Reading plan data access end ------------
 
+
   // -------------- Setting data access start ---------------
 
   void setFrequency(String value) {
@@ -163,6 +164,7 @@ class Model {
   }
 
   // ----------------- Setting data access start ------------
+
 
   // -------------- private method  ------------
   String _time2String(TimeOfDay time) {
