@@ -161,6 +161,11 @@ class Model {
 
   // -------------- Reading plan data access end ------------
 
+  // -------------- Sleeping plan data access begin -----------
+
+
+  //-------------- Sleeping plan data access end ------------
+
 
   // -------------- Setting data access start ---------------
 

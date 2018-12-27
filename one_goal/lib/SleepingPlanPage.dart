@@ -131,7 +131,7 @@ class SleepingState extends State<Sleeping> {
 
                   ListView.builder(
                     padding: const EdgeInsets.all(16.0),
-                    itemCount: 3,//_mockEvents.length,
+                    itemCount: _mockEvents.length,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
                       return _buildEventListTile(index);
@@ -261,6 +261,8 @@ class SleepingState extends State<Sleeping> {
                                       child: new Text('确定'),
                                       onPressed: () {
 
+                                        Model().setEndDateTime(clickDate);
+                                        Model().setEndTimeOfDay(clickTime);
                                         Navigator.of(context).pop();
                                       },
                                     ),

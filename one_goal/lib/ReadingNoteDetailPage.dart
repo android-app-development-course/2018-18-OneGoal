@@ -13,8 +13,9 @@ class ReadingNoteDetailPage extends StatefulWidget {
 
 class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
   final int noteId;
-  String _title = "";
-  String _content = "";
+  String _title = " ";
+  String _content = " ";
+  TextEditingValue control;
 
   _ReadingNodeDetailState(this.noteId);
 
@@ -61,7 +62,11 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 32),
       child: TextField(
-        onChanged: (String str) => _title = str,
+        onSubmitted: (String str){
+          setState(() {
+            _title = str;
+          });
+        }
       ),
     );
   }
