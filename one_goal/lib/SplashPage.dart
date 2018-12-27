@@ -55,7 +55,7 @@ class SplashPageState extends State<SplashPage>
     if(!isStartHomePage)
     {
       if(isGuidePage)
-      {//跳转主页，销毁当前页面
+      {//跳转主页，销毁当前页面 这里要根据所选计划跳转不同的页面
         Navigator.of(context).pushAndRemoveUntil(
             new MaterialPageRoute(builder: (context) => new GoalNamePage()),
             (Route route) => route ==null

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:one_goal/Setting.dart';
 
 class ReadingPlanPage extends StatefulWidget {
   @override
@@ -24,6 +25,16 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
       appBar: AppBar(
         backgroundColor: Colors.grey,
         title: Text('读书计划'),
+        actions: <Widget>[
+          new IconButton(
+              color: Colors.white,
+              icon: new Icon(Icons.settings),
+              onPressed: () => Navigator.of(context).push(
+                  new MaterialPageRoute(builder: (context) => new Setting())
+              ),
+              tooltip: '设置',
+          ),
+        ],
       ),
       body: Column(children: [
         Text(_getBookName()),

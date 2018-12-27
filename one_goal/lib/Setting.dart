@@ -17,6 +17,7 @@ class SettingState extends State<Setting> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
+        backgroundColor: Colors.grey,
         title: new Text("设置"),
       ),
       body: new Container(
@@ -25,7 +26,7 @@ class SettingState extends State<Setting> {
             children: <Widget>[
 
 
-              new Divider(),
+              //new Divider(),
 
               new ListTile(
                   onTap: () {
@@ -51,7 +52,7 @@ class SettingState extends State<Setting> {
                   title: new Text("意见反馈", style: new TextStyle(fontWeight: FontWeight.w500,),),
 
                   leading: new Icon(
-                    Icons.access_alarms,
+                    Icons.chat,
                     color: Colors.blue[500],
                   ),
                   trailing:new Icon(
@@ -68,7 +69,7 @@ class SettingState extends State<Setting> {
                   },
                   title: new Text("通用", style: new TextStyle(fontWeight: FontWeight.w500)),
                   leading: new Icon(
-                    Icons.access_alarms,
+                    Icons.apps,
                     color: Colors.blue[500],
                   ),
                   trailing:new Icon(
@@ -79,7 +80,7 @@ class SettingState extends State<Setting> {
 
               new Divider(),
 
-              new ListTile(
+              /*new ListTile(
                   onTap: () {
                     print('点击');
                   },
@@ -91,7 +92,23 @@ class SettingState extends State<Setting> {
                   )
               ),
 
-              new Divider(),
+              new Divider(),*/
+
+              new Row(
+                children: <Widget>[
+                  new Expanded(
+                      child: new RaisedButton(
+                        onPressed: () => {},
+                        textColor: Colors.white,
+                        color: Colors.red,
+                        child: new Text("结束任务", style: new TextStyle(fontWeight: FontWeight.w500)),
+                      ),
+                  ),
+                ]
+              ),
+
+
+
 
             ],
           )
