@@ -63,7 +63,7 @@ class ReadingNoteProvider {
     if (maps.length > 0) {
       return ReadingNote.fromMaps(maps);
     }
-    return null;
+    return List<ReadingNote>();
   }
 
 }

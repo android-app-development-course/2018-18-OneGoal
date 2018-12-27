@@ -28,9 +28,9 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
           _buildTitleTextField(),
           _buildTitle('内容'),
           _buildContentTextField(),
-          Spacer(   // fixme: push confirm button to the bottom of screen
-            flex: 2
-          ),
+//          Spacer(   // fixme: push confirm button to the bottom of screen
+//            flex: 2
+//          ),
           _buildConfirmButton(),
         ],
       )),

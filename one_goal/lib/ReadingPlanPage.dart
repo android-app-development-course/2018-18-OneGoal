@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:one_goal/Setting.dart';
+import 'ModelReadingNote.dart';
+import 'Model.dart';
 
 class ReadingPlanPage extends StatefulWidget {
   @override
@@ -6,24 +9,49 @@ class ReadingPlanPage extends StatefulWidget {
 }
 
 class _ReadingPlanState extends State<ReadingPlanPage> {
+  List<ReadingNote> notes;
+
   int _getBookPages() {
-    return 100; // TODO: connect to database
+    return 10;
+    return int.parse(Model().getBookPages());
   }
 
   int _getCurrentPage() {
-    return 56;
+    return 1;
+    return int.parse(Model().getCurrentBookPages());
   }
 
   String _getBookName() {
-    return "Compiler: principle...";
+    return Model().getBookName();
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return new FutureBuilder(
+      future: Model().getAllReadingNotes().then((ns) => notes = ns),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          return snapshot.hasData ? _scaffold():
+            Center( child: Text(snapshot.toString())
+            );
+        }
+    );
+  }
+
+  Widget _scaffold() {
+    return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.grey,
         title: Text('读书计划'),
+        actions: <Widget>[
+          new IconButton(
+            color: Colors.white,
+            icon: new Icon(Icons.settings),
+            onPressed: () => Navigator.of(context).push(
+                new MaterialPageRoute(builder: (context) => new Setting())
+            ),
+            tooltip: '设置',
+          ),
+        ],
       ),
       body: Column(children: [
         Text(_getBookName()),
@@ -31,6 +59,15 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
         _eventListView(),
         _addNoteButton(),
       ]),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            child: Icon(Icons.create),
+            onPressed: () {},
+          )
+        ],
+      ),
     );
   }
 
@@ -39,6 +76,10 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
       LinearProgressIndicator(value: _getCurrentPage() / _getBookPages()),
       Text('完成度(${_getCurrentPage()}/${_getBookPages()})')
     ]);
+  }
+
+  void onAddNoteButtonClicked() {
+
   }
 
   Widget _eventListView() {

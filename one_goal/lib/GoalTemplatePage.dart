@@ -73,12 +73,7 @@ Widget _backgroundStack(Widget widget) {
         ),
         constraints: new BoxConstraints.expand(),
       ),
-
-
-     /* Image.asset("image/start_background2.jpg",    // fixme: unable to fill the image
-          fit: BoxFit.cover,
-      ),*/
-      widget
+      widget,
     ],
   );
 }
@@ -91,7 +86,7 @@ Widget _backgroundStack(Widget widget) {
           margin: const EdgeInsets.only(bottom: 64),
           alignment: Alignment.bottomCenter,
           child: RaisedButton(
-            onPressed: null,
+            onPressed: _gotoTimeSelectingPage,
             child: Text(
               'Next',
               style: TextStyle(
@@ -137,6 +132,7 @@ Widget _backgroundStack(Widget widget) {
                   ),
                   keyboardType: TextInputType.number,
                   maxLength: 6,
+                  // TODO: need a validator
                 ),
               )
 
@@ -164,8 +160,7 @@ Widget _backgroundStack(Widget widget) {
     if (_tabController.index == 0) {  // reading plan is chosen
       Model().setBookName(_bookNameCtrl.text);
       Model().setBookPages(_bookPageCtrl.text);
-      // TODO: go to time selecting page
-      //Navigator.of(context)
+      Navigator.of(context).pushNamed('/goaltimepage');
     }
   }
 }
