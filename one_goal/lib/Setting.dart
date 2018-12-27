@@ -41,11 +41,11 @@ class SettingState extends State<Setting> {
                   title: new Text("提醒频率", style: new TextStyle(fontWeight: FontWeight.w500)),
                   leading: new Icon(
                     Icons.access_alarms,
-                    color: Colors.blue[500],
+                    color: Colors.blueGrey,
                   ),
                   trailing:new Icon(
                     Icons.arrow_forward_ios,
-                    color: Colors.blue[500],
+                    color: Colors.blueGrey,
                   )
               ),
 
@@ -61,11 +61,11 @@ class SettingState extends State<Setting> {
 
                   leading: new Icon(
                     Icons.chat,
-                    color: Colors.blue[500],
+                    color: Colors.blueGrey,
                   ),
                   trailing:new Icon(
                     Icons.arrow_forward_ios,
-                    color: Colors.blue[500],
+                    color: Colors.blueGrey,
                   )
               ),
 
@@ -80,11 +80,11 @@ class SettingState extends State<Setting> {
                   title: new Text("关于", style: new TextStyle(fontWeight: FontWeight.w500)),
                   leading: new Icon(
                     Icons.info_outline,
-                    color: Colors.blue[500],
+                    color: Colors.blueGrey,
                   ),
                   trailing:new Icon(
                     Icons.arrow_forward_ios,
-                    color: Colors.blue[500],
+                    color: Colors.blueGrey,
                   )
               ),
 

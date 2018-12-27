@@ -58,9 +58,12 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
         ],
       ),
       body: Column(children: [
-        Text(_getBookName()),   // fixme: needs beautify
+        Text(_getBookName(), style: TextStyle(
+          fontSize: 32.0,
+         )),   // fixme: needs beautify
         _progressBar(),
         _eventListView(),
+
 //        _addNoteButton(),
       ]),
       floatingActionButton: Column(
@@ -103,16 +106,31 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
 //      itemExtent: 30,
 //      shrinkWrap: true,
         itemBuilder: _buildEventListTile,
-      )
+      ),
+
     );
   }
 
   Widget _buildEventListTile(BuildContext context, int index) {
-    return ListTile(
-      leading: Icon(Icons.done),
-      title: Text(notes[index].title),
-      onTap: () => _onNoteTileTapped(context, index),
+    return new Container(
+      child: new Column(
+        children: <Widget>[
+          new Divider(),
+          ListTile(
+            leading: Icon(Icons.done),
+            title: Text(notes[index].title),
+            trailing:Icon(Icons.arrow_forward_ios),
+            onTap: () => _onNoteTileTapped(context, index),
+          ),
+
+        ],
+      ),
     );
+
+
+
+
+    /**/
   }
 
   Future<bool> _mockDatabase() async {

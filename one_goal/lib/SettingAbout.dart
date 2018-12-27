@@ -22,7 +22,9 @@ class SettingAbout extends StatelessWidget
                   child: new Container(
                     padding: EdgeInsets.fromLTRB(0, 40, 0, 10),
                     alignment: Alignment.center,
-                    child: new Image.asset("image/icon.png",),
+                    child: new Image.asset("image/icon.png",
+                      fit:BoxFit.contain,
+                    ),
                   ),
               ),
             ],
