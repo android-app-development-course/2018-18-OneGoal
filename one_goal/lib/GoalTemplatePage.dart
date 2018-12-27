@@ -90,7 +90,7 @@ Widget _backgroundStack(Widget widget) {
           margin: const EdgeInsets.only(bottom: 64),
           alignment: Alignment.bottomCenter,
           child: RaisedButton(
-            onPressed: _gotoTimeSelectingPage,
+            onPressed: !_inputIsValidate() ? null :  _onNextButtonClicked,
             child: Text(
               'Next',
               style: TextStyle(
@@ -110,7 +110,6 @@ Widget _backgroundStack(Widget widget) {
       padding: EdgeInsets.fromLTRB(64.0, 64.0, 64.0, 0),
       child: Column(
         children: <Widget>[
-
           new Text(
               'OneGoal',
               style: TextStyle(
@@ -239,20 +238,28 @@ Widget _backgroundStack(Widget widget) {
     }
   }
 
-  void _gotoTimeSelectingPage() {
+  void _onNextButtonClicked() {
     if (_tabController.index == 0) {  // reading plan is chosen
       Model().setBookName(_bookNameCtrl.text);
       Model().setBookPages(_bookPageCtrl.text);
-      Model().setGoalType("reading");
+      Model().setGoalType(Model.READ);
     }
-    else if (_tabController.index == 1) {  // reading plan is chosen
-
-      Model().setGoalType("sleeping");
+    else if (_tabController.index == 1) {  // sleeping plan is chosen
+      Model().setGoalType(Model.SLEEP);
     }
-    else if (_tabController.index == 2) {  // reading plan is chosen
+    else if (_tabController.index == 2) {  // weighting plan is chosen
 
-      Model().setGoalType("weighting");
+      Model().setGoalType(Model.WEIGHT);
     }
     Navigator.of(context).pushNamed('/goaltimepage');
+  }
+
+  bool _inputIsValidate() {
+    switch (_tabController.index) {
+      case 1: return _bookNameCtrl.text.isNotEmpty && _bookPageCtrl.text.isNotEmpty;
+      case 2: return true;
+      case 3: return true;
+    }
+    return true;
   }
 }

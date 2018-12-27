@@ -48,7 +48,7 @@ class Model {
 
   // -------------- global settings begin ------------
 
-  bool isInitializing() {
+  bool hasInitialized() {
     return _sharedPreferences.getBool(_INITIALIZED) ?? false;
   }
 

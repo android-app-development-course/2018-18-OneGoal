@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:one_goal/ReadingPlanPage.dart';
+import 'Model.dart';
 
 class GoalTimePage extends StatefulWidget
 {
@@ -192,6 +193,8 @@ class TimeState extends State<GoalTimePage> {
 
   void _finish()
   {
+    // TODO: data validation
+    Model().setInitialized();
     Navigator.of(context).pushAndRemoveUntil(
         new MaterialPageRoute(builder: (context) => new ReadingPlanPage()),
             (Route route) => route ==null
