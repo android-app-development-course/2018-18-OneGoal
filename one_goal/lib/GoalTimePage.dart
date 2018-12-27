@@ -10,12 +10,11 @@ class GoalTimePage extends StatefulWidget
   TimeState createState() => new TimeState();
 }
 
-
-
 class TimeState extends State<GoalTimePage> {
 
-  DateTime StartDate=new DateTime.now();
-  DateTime EndDate=new DateTime.now();
+  DateTime startDate = new DateTime.now();
+  DateTime endDate = new DateTime.now();
+  String _errMsg = "";  // TODO: show an error message if input is invalid
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +58,7 @@ class TimeState extends State<GoalTimePage> {
 
                     new ListTile(
                         onTap: showDate2,
-                        title: new Text(StartDate.toString().substring(0,10), style: new TextStyle(fontSize: 20.0,fontWeight: FontWeight.w500)),
+                        title: new Text(startDate.toString().substring(0,10), style: new TextStyle(fontSize: 20.0,fontWeight: FontWeight.w500)),
                         leading: new Icon(
                           Icons.airline_seat_individual_suite,
                           color: Colors.grey[500],
@@ -94,7 +93,7 @@ class TimeState extends State<GoalTimePage> {
 
                     new ListTile(
                         onTap:showDate,
-                        title: new Text(EndDate.toString().substring(0,10), style: new TextStyle(fontSize: 20.0,fontWeight: FontWeight.w500)),
+                        title: new Text(endDate.toString().substring(0,10), style: new TextStyle(fontSize: 20.0,fontWeight: FontWeight.w500)),
                         leading: new Icon(
                           Icons.airline_seat_individual_suite,
                           color: Colors.grey[500],
@@ -106,7 +105,7 @@ class TimeState extends State<GoalTimePage> {
 
 
               new RaisedButton(
-                onPressed: _finish,
+                onPressed: !_inputIsValidate() ? null : _finish,
                 child: Text(
                   'Finish',
                   style: TextStyle(
@@ -173,7 +172,7 @@ class TimeState extends State<GoalTimePage> {
 
     if(pick !=null){
       setState(() {
-        EndDate=pick;
+        endDate=pick;
       });
     }
   }
@@ -186,19 +185,27 @@ class TimeState extends State<GoalTimePage> {
 
     if(pick !=null){
       setState(() {
-        StartDate=pick;
+        startDate=pick;
       });
     }
   }
 
   void _finish()
   {
-    // TODO: data validation
     Model().setInitialized();
-    Navigator.of(context).pushAndRemoveUntil(
-        new MaterialPageRoute(builder: (context) => new ReadingPlanPage()),
-            (Route route) => route ==null
-    );
+    String goalType = Model().getGoalType();
+    String pageName;
+    switch (goalType) {
+      case Model.READ: pageName = "/readingplanpage"; break;
+      case Model.SLEEP: pageName = "/unsupported"; break;  // TODO: make it support
+      case Model.WEIGHT: pageName = "/unsupported"; break; // TODO: make it support
+    }
+    Navigator.of(context).pushNamedAndRemoveUntil(pageName,
+            (Route route) => route == null);
+  }
+
+  bool _inputIsValidate() {
+    return startDate.compareTo(endDate) < 0;
   }
 
 }

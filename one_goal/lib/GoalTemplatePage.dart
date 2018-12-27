@@ -256,9 +256,12 @@ Widget _backgroundStack(Widget widget) {
 
   bool _inputIsValidate() {
     switch (_tabController.index) {
-      case 1: return _bookNameCtrl.text.isNotEmpty && _bookPageCtrl.text.isNotEmpty;
+      case 0:
+        return _bookNameCtrl.text.isNotEmpty &&
+          _bookPageCtrl.text.isNotEmpty &&
+            num.tryParse(_bookPageCtrl.text) != null;
+      case 1: return true;
       case 2: return true;
-      case 3: return true;
     }
     return true;
   }
