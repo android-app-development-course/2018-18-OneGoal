@@ -54,7 +54,7 @@ class TimeState extends State<GoalTimePage> {
 
                     new ListTile(
                       onTap: showDate2,
-                      title: new Text(StartDate.toString().substring(0,10), style: new TextStyle(fontSize: 20.0,fontWeight: FontWeight.w500)),
+                      title: new Text(StartDate.toString().substring(0,10), style: new TextStyle(fontSize: 15.0,fontWeight: FontWeight.w500)),
                       leading: new Icon(
                         Icons.airline_seat_individual_suite,
                         color: Colors.grey[500],
@@ -74,7 +74,7 @@ class TimeState extends State<GoalTimePage> {
 
                     new ListTile(
                       onTap:showDate,
-                      title: new Text(EndDate.toString().substring(0,10), style: new TextStyle(fontSize: 20.0,fontWeight: FontWeight.w500)),
+                      title: new Text(EndDate.toString().substring(0,10), style: new TextStyle(fontSize: 15.0,fontWeight: FontWeight.w500)),
                       leading: new Icon(
                         Icons.airline_seat_individual_suite,
                         color: Colors.grey[500],
@@ -83,8 +83,7 @@ class TimeState extends State<GoalTimePage> {
                       trailing:new Text("选择结束时间", style: new TextStyle(fontSize: 15.0,fontWeight: FontWeight.w500)),
                     ),
 
-
-
+                    
                     new RaisedButton(
                       onPressed: _finish,
                       child: Text(
