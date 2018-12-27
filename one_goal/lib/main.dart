@@ -11,6 +11,7 @@ import 'package:one_goal/ReadingNoteDetailPage.dart';
 import 'package:one_goal/Setting.dart';
 import 'package:one_goal/Model.dart';
 import 'package:one_goal/GoalTimePage.dart';
+import 'package:one_goal/ResultOfReading.dart';
 
 void main() async {
   //debugPaintSizeEnabled = true;
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: new ReadingPlanPage(),
+      home: new ResultOfReading(),
       routes: <String, WidgetBuilder> {
         //'/HomePage': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
         '/goalnamepage': (context) => GoalNamePage(),

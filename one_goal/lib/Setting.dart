@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:one_goal/SettingRemain.dart';
+import 'package:one_goal/SettingFeedback.dart';
 
 class Setting extends StatefulWidget
 {
@@ -30,9 +32,11 @@ class SettingState extends State<Setting> {
 
               new ListTile(
                   onTap: () {
-                    print('点击');
+                    Navigator.of(context).push(
+                        new MaterialPageRoute(builder: (context) => new SettingRemain())
+                    );
                   },
-                  title: new Text("提醒功能 ", style: new TextStyle(fontWeight: FontWeight.w500)),
+                  title: new Text("提醒频率", style: new TextStyle(fontWeight: FontWeight.w500)),
                   leading: new Icon(
                     Icons.access_alarms,
                     color: Colors.blue[500],
@@ -47,7 +51,9 @@ class SettingState extends State<Setting> {
 
               new ListTile(
                   onTap: () {
-                    print('点击');
+                    Navigator.of(context).push(
+                        new MaterialPageRoute(builder: (context) => new SettingFeedback())
+                    );
                   },
                   title: new Text("意见反馈", style: new TextStyle(fontWeight: FontWeight.w500,),),
 

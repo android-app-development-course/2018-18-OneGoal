@@ -37,6 +37,7 @@ class Model {
   static const String BOOK_PAGES = 'book_pages';
   static const String CURRENT_BOOK_PAGES = 'current_book_pages';
 
+  static const String FREQUENCY = 'frequency';
 
   SharedPreferences _sharedPreferences;
   ReadingNoteProvider readingNoteProvider;
@@ -159,6 +160,20 @@ class Model {
 
 
   // -------------- Reading plan data access end ------------
+
+
+  // -------------- Setting data access start ---------------
+
+  void setFrequency(String value) {
+    _sharedPreferences.setString(FREQUENCY, value);
+  }
+
+  String getFrequency() {
+    return _sharedPreferences.getString(FREQUENCY);
+  }
+
+  // ----------------- Setting data access start ------------
+
 
   // -------------- private method  ------------
   String _time2String(TimeOfDay time) {

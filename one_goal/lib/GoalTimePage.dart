@@ -32,11 +32,31 @@ class TimeState extends State<GoalTimePage> {
 
               ),
 
+             /* new Expanded(
+                  child: new Container(
+                   alignment: Alignment.topCenter,
+                    padding: const EdgeInsets.only(bottom: 32.0),
+                    child: new Text(
+                      '开始时间',
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Lobster'
+                      ),
+                    ),
+                  )),*/
+
+              new Text(
+                  'StartTime',
+                  style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Lobster'
+                  )
+              ),
 
                     new ListTile(
-                        onTap: () {
-                          print('点击');
-                        },
+                        onTap: showDate2,
                         title: new Text(StartDate.toString().substring(0,10), style: new TextStyle(fontWeight: FontWeight.w500)),
                         leading: new Icon(
                           Icons.airline_seat_individual_suite,
@@ -46,10 +66,31 @@ class TimeState extends State<GoalTimePage> {
                     ),
 
 
+            /*  new Expanded(
+                  child: new Container(
+                    alignment: Alignment.topCenter,
+                    padding: const EdgeInsets.only(bottom: 32.0),
+                    child: new Text(
+                      '结束时间',
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Lobster'
+                      ),
+                    ),
+                  )),*/
+
+            new Text(
+              'EndTime',
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Lobster'
+              )
+            ),
+
                     new ListTile(
-                        onTap: () {
-                          print('点击');
-                        },
+                        onTap:showDate,
                         title: new Text(EndDate.toString().substring(0,10), style: new TextStyle(fontWeight: FontWeight.w500)),
                         leading: new Icon(
                           Icons.airline_seat_individual_suite,
@@ -59,7 +100,20 @@ class TimeState extends State<GoalTimePage> {
                     ),
 
 
-              new Row(
+
+              new RaisedButton(
+                onPressed: () {
+                },
+                child: Text(
+                  'Next',
+                  style: TextStyle(
+                      fontSize: 32.0,
+                      fontFamily: 'Lobster'
+                  ),
+                ),
+              ),
+
+            /*  new Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     new RaisedButton(
@@ -88,7 +142,7 @@ class TimeState extends State<GoalTimePage> {
                       elevation: 5.0,//按钮下面的阴影
                     ),
                     ]
-              ),
+              ),*/
 
 
 

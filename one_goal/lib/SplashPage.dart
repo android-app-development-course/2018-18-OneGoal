@@ -26,7 +26,7 @@ class SplashPageState extends State<SplashPage>
       child: ConstrainedBox(
         child: Image.asset(
           "image/splash_img.png",
-          fit:BoxFit.contain,
+          fit:BoxFit.cover,
         ),
         constraints: new BoxConstraints.expand(),
       ),
