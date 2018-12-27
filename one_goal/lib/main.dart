@@ -26,11 +26,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: new SplashPage(),
+      home: new ReadingPlanPage(),
       routes: <String, WidgetBuilder> {
         //'/HomePage': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
         '/goalnamepage': (context) => GoalNamePage(),
-        '/goaltemplatepage': (context) => GoalTemplatePage()
+        '/goaltemplatepage': (context) => GoalTemplatePage(),
+        '/goaltimepage': (context) => GoalTimePage()
       }
     );
   }

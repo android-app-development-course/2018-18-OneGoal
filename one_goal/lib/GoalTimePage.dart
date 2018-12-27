@@ -20,6 +20,7 @@ class TimeState extends State<GoalTimePage> {
     return new Scaffold(
       appBar: new AppBar(
         title: new Text("选择时间"),
+        backgroundColor: Colors.grey,
       ),
       body: new Container(
           margin: const EdgeInsets.fromLTRB(17.0, 0.0, 17.0, 10.0),
@@ -99,14 +100,14 @@ class TimeState extends State<GoalTimePage> {
   }
 
   void showDate(){
-    seclectTime(context);
+    selectTime(context);
   }
 
   void showDate2(){
     seclectTime2(context);
   }
 
-  Future<Null> seclectTime(BuildContext context) async{
+  Future<Null> selectTime(BuildContext context) async{
     DateTime pick=await showDatePicker(context: context,
         initialDate: new DateTime.now(),
         firstDate: new DateTime(2017),

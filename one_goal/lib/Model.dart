@@ -2,6 +2,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path/path.dart';
 import 'package:one_goal/ModelReadingNote.dart';
+import 'package:flutter/material.dart';
 
 class Model {
   static Model _model = Model._internal();
@@ -14,34 +15,37 @@ class Model {
     _sharedPreferences = await SharedPreferences.getInstance();
     readingNoteProvider = new ReadingNoteProvider();
     var databasePath = await getDatabasesPath();
-    readingNoteProvider.open(join(databasePath, 'onegoal.db'));
+    await readingNoteProvider.open(join(databasePath, 'onegoal.db'));
   }
 
   static const String _INITIALIZED = 'initialized';
   static const String _GOAL_NAME = 'goal_name';
   static const String _GOAL_TYPE = 'goal_type';
-  static const String _BEGIN_TIME = 'begin_time';
-  static const String _END_TIME = 'end_time';
+  static const String _BEGIN_DATE_TIME = 'begin_date_time';
+  static const String _BEGIN_TIME_OF_DAY = 'begin_time_of_day';
+  static const String _END_DATE_TIME = 'begin_date_time';
+  static const String _END_TIME_OF_DAY = 'begin_time_of_day';
 
-  static const String NOT_INITIALIZED = 'not initialized';
+  static const String NOT_INITIALIZED = 'not_initialized';
   static const String READ = 'reading';
   static const String SLEEP = 'sleeping';
   static const String WEIGHT = 'weighting';
 
-  static const String TYPE_MISMATCH = "type mismatch";
+  static const String TYPE_MISMATCH = "type_mismatch";
 
-  static const String BOOK_NAME = 'book name';
-  static const String BOOK_PAGES = 'book pages';
+  static const String BOOK_NAME = 'book_name';
+  static const String BOOK_PAGES = 'book_pages';
+  static const String CURRENT_BOOK_PAGES = 'current_book_pages';
 
 
   SharedPreferences _sharedPreferences;
   ReadingNoteProvider readingNoteProvider;
 
+  // -------------- global settings begin ------------
+
   bool isInitializing() {
     return _sharedPreferences.getBool(_INITIALIZED) ?? false;
   }
-
-  // -------------- global settings begin ------------
 
   void setInitialized() {
     _sharedPreferences.setBool(_INITIALIZED, true);
@@ -62,21 +66,46 @@ class Model {
     _sharedPreferences.setString(_GOAL_NAME, str);
   }
 
-  DateTime getBeginTime() {
-    String timeStr = _sharedPreferences.getString(_BEGIN_TIME) ?? NOT_INITIALIZED;
+  // --- time related begin ----
+
+  DateTime getBeginDateTime() {
+    String timeStr = _sharedPreferences.getString(_BEGIN_DATE_TIME) ??
+        DateTime.now().toIso8601String();
     return DateTime.parse(timeStr);
   }
-  DateTime getEndTime() {
-    String timeStr = _sharedPreferences.getString(_END_TIME) ?? NOT_INITIALIZED;
-    return DateTime.parse(timeStr);
+  void setBeginDateTime(DateTime dateTime) {
+    _sharedPreferences.setString(_BEGIN_DATE_TIME, dateTime.toIso8601String());
   }
 
-  void setBeginAndEndTime(DateTime beginDateTime, DateTime endDateTime) {
-    String begin = beginDateTime.toIso8601String();
-    String end = endDateTime.toIso8601String();
-    _sharedPreferences.setString(_BEGIN_TIME, begin);
-    _sharedPreferences.setString(_END_TIME, end);
+  DateTime getEndDateTime() {
+    String timeStr = _sharedPreferences.getString(_END_DATE_TIME) ??
+        DateTime.now().toIso8601String();
+    return DateTime.parse(timeStr);
   }
+  void setEndDateTime(DateTime dateTime) {
+    _sharedPreferences.setString(_END_DATE_TIME, dateTime.toIso8601String());
+  }
+
+
+  TimeOfDay getBeginTimeOfDay() {
+    String timeStr = _sharedPreferences.getString(_BEGIN_TIME_OF_DAY) ??
+        _time2String(TimeOfDay.now());
+    return _string2Time(timeStr);
+  }
+  void setBeginTimeOfDay(TimeOfDay time) {
+    _sharedPreferences.setString(_BEGIN_TIME_OF_DAY, _time2String(time));
+  }
+
+  TimeOfDay getEndTimeOfDay() {
+    String timeStr = _sharedPreferences.getString(_END_TIME_OF_DAY) ??
+        _time2String(TimeOfDay.now());
+    return _string2Time(timeStr);
+  }
+  void setEndTimeOfDay(TimeOfDay time) {
+    _sharedPreferences.setString(_END_TIME_OF_DAY, _time2String(time));
+  }
+
+  // --- time related end ----
 
   // -------------- global settings end ------------
 
@@ -94,11 +123,19 @@ class Model {
 
   String getBookPages() {
     if (getGoalType() != READ) return TYPE_MISMATCH;
-    return _sharedPreferences.getString(BOOK_PAGES) ?? NOT_INITIALIZED;
+    return _sharedPreferences.getString(BOOK_PAGES) ?? "0";
   }
 
   void setBookPages(String bookPages) {
     _sharedPreferences.setString(BOOK_PAGES, bookPages);
+  }
+  String getCurrentBookPages() {
+    if (getGoalType() != READ) return TYPE_MISMATCH;
+    return _sharedPreferences.getString(CURRENT_BOOK_PAGES) ?? "0";
+  }
+
+  void setCurrentBookPages(String bookPages) {
+    _sharedPreferences.setString(CURRENT_BOOK_PAGES, bookPages);
   }
 
   void insertReadingNote(ReadingNote note) {
@@ -114,5 +151,15 @@ class Model {
 
   // -------------- Reading plan data access end ------------
 
+  // -------------- private method  ------------
+  String _time2String(TimeOfDay time) {
+    return time.hour.toString() + "/" + time.minute.toString();
+  }
+
+  TimeOfDay _string2Time(String str) {
+    List<int> hm = str.split("/").map((str) => int.parse(str));
+    assert (hm.length == 2);
+    return TimeOfDay(hour: hm[0], minute: hm[1]);
+  }
 
 }
