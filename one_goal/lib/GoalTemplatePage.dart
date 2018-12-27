@@ -174,7 +174,7 @@ Widget _backgroundStack(Widget widget) {
                   child:RaisedButton(
                       onPressed: _selectTime,
                       child: _time == null ?
-                          new Text("点击输入时间", style: TextStyle(fontSize: 18),)
+                          new Text("输入时间", style: TextStyle(fontSize: 18),)
                           : new Text(Utilities.time2String(_time), style: TextStyle(fontSize: 18),),
                   )
               )
