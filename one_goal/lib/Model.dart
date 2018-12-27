@@ -1,8 +1,9 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:path/path.dart';
 import 'package:one_goal/ModelReadingNote.dart';
 import 'package:flutter/material.dart';
+import 'ModelSleepingNote.dart';
+import 'package:one_goal/DatabaseInitializer.dart';
 
 class Model {
   static Model _model = Model._internal();
@@ -13,9 +14,9 @@ class Model {
 
   Future<void> init() async {
     _sharedPreferences = await SharedPreferences.getInstance();
-    readingNoteProvider = new ReadingNoteProvider();
-    var databasePath = await getDatabasesPath();
-    await readingNoteProvider.open(join(databasePath, 'onegoal.db'));
+    await DatabaseInitializer.initialize();
+    readingNoteProvider = new ReadingNoteProvider(DatabaseInitializer.db);
+    sleepingNoteProvider = new SleepingNoteProvider(DatabaseInitializer.db);
   }
 
   static const String _INITIALIZED = 'initialized';
@@ -39,8 +40,10 @@ class Model {
 
   static const String FREQUENCY = 'frequency';
 
+  Database db;
   SharedPreferences _sharedPreferences;
   ReadingNoteProvider readingNoteProvider;
+  SleepingNoteProvider sleepingNoteProvider;
 
   // -------------- global settings begin ------------
 
@@ -161,6 +164,28 @@ class Model {
 
   // -------------- Reading plan data access end ------------
 
+  // -------------- Sleeping plan data access begin ------------
+
+  void insertSleepingNote(SleepingNote note) {
+    sleepingNoteProvider.insert(note);  // fixme: need synchronize
+  }
+
+  Future<List<SleepingNote>> getAllSleepingNotes() async {
+    List<SleepingNote> result = await sleepingNoteProvider.getSleepingNotes();
+    return result;
+  }
+
+  Future<SleepingNote> getSleepingNote(int id) async {
+    var result = await sleepingNoteProvider.getSleepingNote(id);
+    return result;
+  }
+
+  Future<int> updateSleepingNote(SleepingNote note) async {
+    return await sleepingNoteProvider.update(note);
+  }
+
+
+  // -------------- Sleeping plan data access end ------------
 
   // -------------- Setting data access start ---------------
 
@@ -185,5 +210,4 @@ class Model {
     assert (hm.length == 2);
     return TimeOfDay(hour: hm[0], minute: hm[1]);
   }
-
 }
