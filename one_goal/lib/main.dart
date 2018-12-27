@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
       ),
-      home: new SplashPage(),
+      home: new Reading(),
       routes: <String, WidgetBuilder> {
         //'/HomePage': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
         '/goalnamepage': (context) => GoalNamePage(),

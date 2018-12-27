@@ -74,7 +74,7 @@ class Model {
 
   // --- time related begin ----
 
-  DateTime getBeginDateTime() {
+  DateTime getBeginDateTime() {  
     String timeStr = _sharedPreferences.getString(_BEGIN_DATE_TIME) ??
         DateTime.now().toIso8601String();
     return DateTime.parse(timeStr);
