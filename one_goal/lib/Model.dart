@@ -207,4 +207,14 @@ class Model {
 
   // ----------------- Setting data access end ------------
 
+
+  // ----------------- Clear data start ---------------------------
+
+  void clearData()
+  {
+    _sharedPreferences.clear();
+  }
+
+  // ----------------- Clear data end ---------------------------
+
 }

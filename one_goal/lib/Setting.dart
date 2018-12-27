@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:one_goal/SettingRemain.dart';
 import 'package:one_goal/SettingFeedback.dart';
 import 'package:one_goal/SettingAbout.dart';
+import 'package:one_goal/Model.dart';
 
 class Setting extends StatefulWidget
 {
@@ -40,11 +41,11 @@ class SettingState extends State<Setting> {
                   title: new Text("提醒频率", style: new TextStyle(fontWeight: FontWeight.w500)),
                   leading: new Icon(
                     Icons.access_alarms,
-                    color: Colors.blue[500],
+                    color: Colors.blueGrey,
                   ),
                   trailing:new Icon(
                     Icons.arrow_forward_ios,
-                    color: Colors.blue[500],
+                    color: Colors.blueGrey,
                   )
               ),
 
@@ -60,11 +61,11 @@ class SettingState extends State<Setting> {
 
                   leading: new Icon(
                     Icons.chat,
-                    color: Colors.blue[500],
+                    color: Colors.blueGrey,
                   ),
                   trailing:new Icon(
                     Icons.arrow_forward_ios,
-                    color: Colors.blue[500],
+                    color: Colors.blueGrey,
                   )
               ),
 
@@ -79,11 +80,11 @@ class SettingState extends State<Setting> {
                   title: new Text("关于", style: new TextStyle(fontWeight: FontWeight.w500)),
                   leading: new Icon(
                     Icons.info_outline,
-                    color: Colors.blue[500],
+                    color: Colors.blueGrey,
                   ),
                   trailing:new Icon(
                     Icons.arrow_forward_ios,
-                    color: Colors.blue[500],
+                    color: Colors.blueGrey,
                   )
               ),
 
@@ -97,7 +98,9 @@ class SettingState extends State<Setting> {
                         children: <Widget>[
                           new Expanded(
                             child: new RaisedButton(
-                              onPressed: () => {},
+                              onPressed: () {
+                                _neverSatisfied();
+                              },
                               textColor: Colors.white,
                               color: Colors.green,
                               child: new Text("新建计划", style: new TextStyle(fontWeight: FontWeight.w500)),
@@ -125,6 +128,42 @@ class SettingState extends State<Setting> {
           )
       ),
       resizeToAvoidBottomPadding: false,
+    );
+  }
+
+  Future<void> _neverSatisfied() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('警告'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('新建计划将清除所有旧数据\n是否继续？'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('是'),
+              onPressed: () {
+                Model().clearData();
+                Navigator.pushNamedAndRemoveUntil(context,
+                  '/goalnamepage', (Route route) => route == null);
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('否'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

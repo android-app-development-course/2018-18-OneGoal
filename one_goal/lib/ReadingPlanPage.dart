@@ -55,7 +55,7 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
       body: Column(children: [
         _buildBookName(),   // fixme: needs beautify
         _progressBar(),
-        notes.isEmpty ? _emptyInfo() : _eventListView(),
+        _eventListView(),
 //        _addNoteButton(),
       ]),
       floatingActionButton: Column(
@@ -75,7 +75,7 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
       padding: const EdgeInsets.symmetric(vertical: 64),
       child: Text(Model().getBookName(),
         style: TextStyle(
-          fontSize: 18,
+          fontSize: 32,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -117,17 +117,26 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
 //      itemExtent: 30,
 //      shrinkWrap: true,
         itemBuilder: _buildEventListTile,
-
-      )
+      ),
     );
   }
 
   Widget _buildEventListTile(BuildContext context, int index) {
-    return ListTile(
-      leading: Icon(Icons.done),
-      title: Text(notes[index].title),
-      onTap: () => _onNoteTileTapped(context, index),
+    return new Container(
+      child: new Column(
+        children: <Widget>[
+          new Divider(),
+          ListTile(
+            leading: Icon(Icons.done),
+            title: Text(notes[index].title),
+            trailing:Icon(Icons.arrow_forward_ios),
+            onTap: () => _onNoteTileTapped(context, index),
+          ),
+
+        ],
+      ),
     );
+
   }
 
   Future<bool> _prepareData() async {
