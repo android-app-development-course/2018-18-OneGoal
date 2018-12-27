@@ -17,6 +17,7 @@ class ReadingState extends State<Reading> {
   bool animate=false;
 
   String kg="5";
+  //get kg;
   int mission=0;
   int maxmission=100;
 
@@ -88,7 +89,7 @@ class ReadingState extends State<Reading> {
           ),
 
               new Container(
-                height: 200.0,
+                height: 300.0,
                 child: new charts.TimeSeriesChart(
                   seriesList,
                   animate: animate,
@@ -100,7 +101,20 @@ class ReadingState extends State<Reading> {
                 //onPressed:
                 color: Colors.lightBlueAccent,//按钮的背景颜色
                 padding: EdgeInsets.all(10.100),//按钮距离里面内容的内边距
-                child: new Text('任务完成'),
+                child: new Text('添加'),
+                textColor: Colors.black,//文字的颜色
+                textTheme:ButtonTextTheme.normal ,//按钮的主题
+                onHighlightChanged: (bool b){//水波纹高亮变化回调
+                },
+                splashColor: Colors.white,//水波纹的颜色
+                elevation: 5.0,//按钮下面的阴影
+              ),
+
+              new RaisedButton(
+                //onPressed:
+                color: Colors.lightBlueAccent,//按钮的背景颜色
+                padding: EdgeInsets.all(10.100),//按钮距离里面内容的内边距
+                child: new Text('结束任务'),
                 textColor: Colors.black,//文字的颜色
                 textTheme:ButtonTextTheme.normal ,//按钮的主题
                 onHighlightChanged: (bool b){//水波纹高亮变化回调
