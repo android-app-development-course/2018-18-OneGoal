@@ -3,6 +3,7 @@ import 'package:one_goal/SettingRemain.dart';
 import 'package:one_goal/SettingFeedback.dart';
 import 'package:one_goal/SettingAbout.dart';
 import 'package:one_goal/Model.dart';
+import 'package:one_goal/ResultOfReading.dart';
 
 class Setting extends StatefulWidget
 {
@@ -99,7 +100,7 @@ class SettingState extends State<Setting> {
                           new Expanded(
                             child: new RaisedButton(
                               onPressed: () {
-                                _neverSatisfied();
+                                _clearData();
                               },
                               textColor: Colors.white,
                               color: Colors.green,
@@ -112,7 +113,11 @@ class SettingState extends State<Setting> {
                         children: <Widget>[
                           new Expanded(
                             child: new RaisedButton(
-                              onPressed: () => {},
+                              onPressed: () {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                  new MaterialPageRoute(builder: (context) => new ResultOfReading()),
+                                  (Route route) => route == null);
+                              },
                               textColor: Colors.white,
                               color: Colors.red,
                               child: new Text("结束计划", style: new TextStyle(fontWeight: FontWeight.w500)),
@@ -131,7 +136,7 @@ class SettingState extends State<Setting> {
     );
   }
 
-  Future<void> _neverSatisfied() async {
+  Future<void> _clearData() async {
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
@@ -149,10 +154,9 @@ class SettingState extends State<Setting> {
             FlatButton(
               child: Text('是'),
               onPressed: () {
-                Model().clearData();
+                //Model().clearData();
                 Navigator.pushNamedAndRemoveUntil(context,
                   '/goalnamepage', (Route route) => route == null);
-                Navigator.of(context).pop();
               },
             ),
             FlatButton(
