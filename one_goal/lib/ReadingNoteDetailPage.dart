@@ -64,8 +64,8 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
                   _buildTitle('内容'),
                   _buildContentTextField(),  // fixme: make a border
                   // fixme: push confirm button to the bottom of screen
-                  _buildPictureGallery(),
-                  _image == null ? Text('no image') : Image.file(_image),
+//                  _buildPictureGallery(),
+                  _buildImageBox(),
                   _buildConfirmButton(),
                 ],
               )),
@@ -108,6 +108,25 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
           border: OutlineInputBorder()
         ),
       ),
+    );
+  }
+
+  Widget _buildImageBox() {
+    return Center(
+      child: GestureDetector(
+        child: Container(
+          width: 200,
+          height: 200,
+          child: _image == null ? Text('no image') : Image.file(_image),
+        ),
+        onTap: _image == null ? null : _onImageTapped),
+    );
+  }
+
+  void _onImageTapped() async {
+    await showDialog(
+        context: context,
+      child: Image.file(_image)
     );
   }
 
