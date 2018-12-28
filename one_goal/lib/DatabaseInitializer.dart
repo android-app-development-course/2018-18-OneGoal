@@ -11,6 +11,10 @@ class DatabaseInitializer {
   static final String columnDate = 'date';
   static final String columnTime = 'time';
 
+  static final String tableNoteLoc = 'notes_image_location';
+  static final String columnNoteId = 'note_id';
+  static final String columnPath = 'path';
+
   static Database db;
   static Future initialize() async {
     var databasePath = await getDatabasesPath();
@@ -25,7 +29,8 @@ class DatabaseInitializer {
           create table $tableNote (
             $columnId integer primary key autoincrement,
             $columnTitle text not null,
-            $columnContent text)
+            $columnContent text,
+            $columnDate text)
         ''');
           await db.execute('''
           create table $tableSleepingNote (
@@ -34,6 +39,12 @@ class DatabaseInitializer {
             $columnContent text,
             $columnDate text,
             $columnTime text)
+        ''');
+          await db.execute('''
+          create table $tableNoteLoc (
+            $columnId integer primary key autoincrement,
+            $columnNoteId integer not null,
+            $columnPath text)
         ''');
         }
     );

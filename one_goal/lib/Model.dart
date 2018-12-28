@@ -5,6 +5,11 @@ import 'package:flutter/material.dart';
 import 'ModelSleepingNote.dart';
 import 'package:one_goal/DatabaseInitializer.dart';
 import 'Utilities.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'ModelNoteImageLocation.dart';
+import 'package:uuid/uuid.dart';
+
 
 class Model {
   static Model _model = Model._internal();
@@ -18,6 +23,8 @@ class Model {
     await DatabaseInitializer.initialize();
     readingNoteProvider = new ReadingNoteProvider(DatabaseInitializer.db);
     sleepingNoteProvider = new SleepingNoteProvider(DatabaseInitializer.db);
+    noteImageLocationProvider = new NoteImageLocationProvider(DatabaseInitializer.db);
+    directory = await getApplicationDocumentsDirectory();
   }
 
   static const String _INITIALIZED = 'initialized';
@@ -41,10 +48,13 @@ class Model {
 
   static const String FREQUENCY = 'frequency';
 
-  Database db;
   SharedPreferences _sharedPreferences;
   ReadingNoteProvider readingNoteProvider;
   SleepingNoteProvider sleepingNoteProvider;
+  NoteImageLocationProvider noteImageLocationProvider;
+  Uuid uuid = new Uuid();
+
+  Directory directory;
 
   // -------------- global settings begin ------------
 
@@ -74,7 +84,7 @@ class Model {
 
   // --- time related begin ----
 
-  DateTime getBeginDateTime() {
+  DateTime getBeginDateTime() {  
     String timeStr = _sharedPreferences.getString(_BEGIN_DATE_TIME) ??
         DateTime.now().toIso8601String();
     return DateTime.parse(timeStr);
@@ -162,7 +172,24 @@ class Model {
     return await readingNoteProvider.update(note);
   }
 
+  Future saveImages(int noteId, List<File> images) async {
+    for (var i = 0; i != images.length; ++i) {
+      String path = '$directory.path/${uuid.v1()}';
+      images[i].copy(path);
+      var imgLoc = new NoteImageLocation(noteId: noteId, path: path);
+      noteImageLocationProvider.insert(imgLoc);
+    }
+  }
 
+  Future<List<File>> loadImages(int noteId) async {
+    List<NoteImageLocation> locs = await noteImageLocationProvider.getNoteImageLocations();
+    var fileList = new List<File>();
+    for (int i = 0; i != locs.length; ++i) {
+      File imgFile = File(locs[i].path);
+      fileList.add(imgFile);
+    }
+    return fileList;
+  }
 
   // -------------- Reading plan data access end ------------
 

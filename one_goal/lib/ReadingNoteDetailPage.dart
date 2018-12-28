@@ -26,6 +26,7 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
 
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    print(image.path);
     setState(() => _image = image);
   }
 

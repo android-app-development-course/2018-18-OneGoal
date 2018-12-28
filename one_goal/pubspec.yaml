@@ -25,6 +25,8 @@ dependencies:
   charts_flutter: ^0.5.0
   image: ^2.0.5
   image_picker: ^0.4.10
+  path_provider: ^0.4.1
+  uuid: 1.0.3
 
 dev_dependencies:
   flutter_test:
