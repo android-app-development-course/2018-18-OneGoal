@@ -185,7 +185,6 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
               onPressed: () {
                 Navigator.pushNamedAndRemoveUntil(context,
                     '/resultofreading', (Route route) => route == null);
-                Navigator.of(context).pop();
               },
             ),
             FlatButton(
