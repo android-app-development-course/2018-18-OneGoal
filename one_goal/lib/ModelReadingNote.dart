@@ -4,18 +4,24 @@ final String tableNote = 'notes';
 final String columnId = '_id';
 final String columnTitle = 'title';
 final String columnContent = 'content';
+final String columnDate = 'date';
 
 class ReadingNote {
   int id;
   String title;
   String content;
+  String time;
 
-  ReadingNote({this.title, this.content});
+  ReadingNote({this.title, this.content, this.time}) {
+    if (time == null || time.isEmpty)
+      this.time = DateTime.now().toIso8601String();
+  }
 
   Map<String, dynamic> toMap() {
     var map = <String, dynamic> {
       columnTitle: title,
-      columnContent: content
+      columnContent: content,
+      columnDate: time,
     };
     if (id != null) {
       map[columnId] = id;
@@ -26,7 +32,8 @@ class ReadingNote {
   static ReadingNote fromMap(Map<String, dynamic> singleMap) {
     var note = new ReadingNote(
       title: singleMap[columnTitle],
-      content: singleMap[columnContent]
+      content: singleMap[columnContent],
+      time: singleMap[columnDate],
     );
     note.id = singleMap[columnId];
     return note;
@@ -40,18 +47,10 @@ class ReadingNote {
       note.id = singleMap[columnId];
       note.title = singleMap[columnTitle];
       note.content = singleMap[columnContent];
+      note.time = singleMap[columnDate];
       newList.add(note);
     }
     return newList;
-
-//    return maps.map( (m) {    // why does't it work??
-//      ReadingNote note = new ReadingNote();
-//      note.id = m[columnId];
-//      note.title = m[columnTitle];
-//      note.content = m[columnContent];
-//      return note;
-//    }
-//    );
   }
 }
 
@@ -67,7 +66,7 @@ class ReadingNoteProvider {
 
   Future<List<ReadingNote>> getReadingNotes() async {
     List<Map> maps = await db.query(tableNote,
-      columns: [columnId, columnTitle, columnContent],
+      columns: [columnId, columnTitle, columnContent, columnDate],
       where: null,
     );
     if (maps.length > 0) {
@@ -78,7 +77,7 @@ class ReadingNoteProvider {
 
   Future<ReadingNote> getReadingNote(int id) async {
     List<Map> maps = await db.query(tableNote,
-      columns: [columnId, columnTitle, columnContent],
+      columns: [columnId, columnTitle, columnContent, columnDate],
       where: "$columnId = ?",
       whereArgs: [id]
     );

@@ -29,7 +29,8 @@ class DatabaseInitializer {
           create table $tableNote (
             $columnId integer primary key autoincrement,
             $columnTitle text not null,
-            $columnContent text)
+            $columnContent text,
+            $columnDate text)
         ''');
           await db.execute('''
           create table $tableSleepingNote (
