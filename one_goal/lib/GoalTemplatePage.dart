@@ -90,7 +90,7 @@ Widget _backgroundStack(Widget widget) {
           margin: const EdgeInsets.only(bottom: 64),
           alignment: Alignment.bottomCenter,
           child: RaisedButton(
-            onPressed: _gotoTimeSelectingPage,
+            onPressed: !_inputIsValidate() ? null :  _onNextButtonClicked,
             child: Text(
               'Next',
               style: TextStyle(
@@ -110,19 +110,14 @@ Widget _backgroundStack(Widget widget) {
       padding: EdgeInsets.fromLTRB(64.0, 64.0, 64.0, 0),
       child: Column(
         children: <Widget>[
-
           new Text(
-              'OneGoal',
-              style: TextStyle(
-                  fontSize: 48.0,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Lobster'
-              )),
-
-          Padding(
-            padding: EdgeInsets.all(20.0),
+            '读书计划',
+            style: TextStyle(
+                fontSize: 48.0,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Lobster'
+            ),
           ),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -166,6 +161,14 @@ Widget _backgroundStack(Widget widget) {
       padding: EdgeInsets.fromLTRB(64.0, 100.0, 64.0, 0),
       child: Column(
         children: <Widget>[
+          new Text(
+            '睡觉计划',
+            style: TextStyle(
+                fontSize: 48.0,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Lobster'
+            ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -174,8 +177,8 @@ Widget _backgroundStack(Widget widget) {
                   child:RaisedButton(
                       onPressed: _selectTime,
                       child: _time == null ?
-                          new Text("输入时间", style: TextStyle(fontSize: 18),)
-                          : new Text(Utilities.time2String(_time), style: TextStyle(fontSize: 18),),
+                          new Text("点击输入时间", style: TextStyle(fontSize: 12),)
+                          : new Text(_time.hour.toString()+":"+_time.minute.toString(), style: TextStyle(fontSize: 18),),
                   )
               )
             ],
@@ -191,6 +194,14 @@ Widget _backgroundStack(Widget widget) {
       padding: EdgeInsets.fromLTRB(64.0, 100.0, 64.0, 0),
       child: Column(
         children: <Widget>[
+          new Text(
+            '体重计划',
+            style: TextStyle(
+                fontSize: 48.0,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Lobster'
+            ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -201,9 +212,10 @@ Widget _backgroundStack(Widget widget) {
                     decoration: InputDecoration(
                         hintText: "请输入目标体重"
                     ),
+                    keyboardType: TextInputType.number,
                   )
               ),
-              Text("kg"),
+              Text("kg", style: new TextStyle(fontSize: 18),),
             ],
           ),
         ],
@@ -239,20 +251,31 @@ Widget _backgroundStack(Widget widget) {
     }
   }
 
-  void _gotoTimeSelectingPage() {
+  void _onNextButtonClicked() {
     if (_tabController.index == 0) {  // reading plan is chosen
       Model().setBookName(_bookNameCtrl.text);
       Model().setBookPages(_bookPageCtrl.text);
-      Model().setGoalType("reading");
+      Model().setGoalType(Model.READ);
     }
-    else if (_tabController.index == 1) {  // reading plan is chosen
-
-      Model().setGoalType("sleeping");
+    else if (_tabController.index == 1) {  // sleeping plan is chosen
+      Model().setGoalType(Model.SLEEP);
     }
-    else if (_tabController.index == 2) {  // reading plan is chosen
+    else if (_tabController.index == 2) {  // weighting plan is chosen
 
-      Model().setGoalType("weighting");
+      Model().setGoalType(Model.WEIGHT);
     }
     Navigator.of(context).pushNamed('/goaltimepage');
+  }
+
+  bool _inputIsValidate() {
+    switch (_tabController.index) {
+      case 0:
+        return _bookNameCtrl.text.isNotEmpty &&
+          _bookPageCtrl.text.isNotEmpty &&
+            num.tryParse(_bookPageCtrl.text) != null;
+      case 1: return true;
+      case 2: return true;
+    }
+    return true;
   }
 }

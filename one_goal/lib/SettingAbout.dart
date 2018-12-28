@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class SettingAbout extends StatelessWidget
 {
-  static String version = '0.5';
+  static String version = 'V0.5';
 
   SettingAbout(): super();
 

@@ -98,7 +98,7 @@ class ReadingState extends State<Reading> {
 
 
               new RaisedButton(
-                //onPressed:
+                onPressed: () {},
                 color: Colors.lightBlueAccent,//按钮的背景颜色
                 padding: EdgeInsets.all(10.100),//按钮距离里面内容的内边距
                 child: new Text('添加'),
@@ -111,7 +111,7 @@ class ReadingState extends State<Reading> {
               ),
 
               new RaisedButton(
-                //onPressed:
+                onPressed: () {},
                 color: Colors.lightBlueAccent,//按钮的背景颜色
                 padding: EdgeInsets.all(10.100),//按钮距离里面内容的内边距
                 child: new Text('结束任务'),

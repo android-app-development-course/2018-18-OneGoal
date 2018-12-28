@@ -28,7 +28,7 @@ class _GoalNamePageState extends State<GoalNamePage> {
               children: <Widget>[
                 _oneGoalText(),
                 _nameInput(),
-                _nextButton(context)
+                _nextButton()
               ],
             )
           ]
@@ -66,18 +66,14 @@ class _GoalNamePageState extends State<GoalNamePage> {
     );
   }
 
-  Widget _nextButton(BuildContext context) {
+  Widget _nextButton() {
     return new Expanded(
         child: new Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.only(bottom: 32.0),
           child: new RaisedButton(
-            onPressed: () {
-              if (textFieldController.text.length != 0) {
-                Model().setGoalName(textFieldController.text);
-                Navigator.of(context).pushNamed('/goaltemplatepage');
-              }
-            },
+            onPressed: textFieldController.text.length == 0 ? null :
+                _onNextButtonClicked,
             child: Text(
               'Next',
               style: TextStyle(
@@ -88,6 +84,11 @@ class _GoalNamePageState extends State<GoalNamePage> {
           ),
         )
     );
+  }
+
+  void _onNextButtonClicked() {
+    Model().setGoalName(textFieldController.text);
+    Navigator.of(context).pushNamed('/goaltemplatepage');
   }
 
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'ModelReadingNote.dart';
 import 'Model.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 class ReadingNoteDetailPage extends StatefulWidget {
   final int noteId;
@@ -18,7 +20,15 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
   TextEditingController _titleCtrl = new TextEditingController();
   TextEditingController _contentCtrl = new TextEditingController();
 
+  File _image;
+
   _ReadingNodeDetailState(this.noteId);
+
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    print(image.path);
+    setState(() => _image = image);
+  }
 
   @override
   void dispose() {
@@ -54,9 +64,15 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
                   _buildTitle('内容'),
                   _buildContentTextField(),  // fixme: make a border
                   // fixme: push confirm button to the bottom of screen
+                  _buildPictureGallery(),
+                  _image == null ? Text('no image') : Image.file(_image),
                   _buildConfirmButton(),
                 ],
               )),
+          floatingActionButton: FloatingActionButton(
+              onPressed: _onCameraButtonClicked,
+            child: Icon(Icons.add_a_photo),
+          ),
         );
       },
     );
@@ -118,12 +134,21 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
   }
 
   Widget _buildPictureGallery() {
-    return ListView.builder(
-      scrollDirection: Axis.horizontal,
+    return Container(
+      height: 30,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 3,
         itemBuilder: (context, index) {
+          return Text("test");
           // TODO: feed images list data
         },
+      ),
     );
+  }
+
+  void _onCameraButtonClicked() {
+    getImage();
   }
 
   void _confirmAddNoteButtonPressed(BuildContext context) {

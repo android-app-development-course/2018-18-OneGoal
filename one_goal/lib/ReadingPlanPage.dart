@@ -20,15 +20,10 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
     return int.parse(Model().getCurrentBookPages());
   }
 
-  String _getBookName() {
-    return Model().getBookName();
-  }
-
   @override
   Widget build(BuildContext context) {
     return new FutureBuilder(
-//      future: Model().getAllReadingNotes().then((ns) => notes = ns),
-        future: _mockDatabase(),
+        future: _prepareData(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           return snapshot.hasData ? _scaffold():
             Center( child: Text(
@@ -58,12 +53,9 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
         ],
       ),
       body: Column(children: [
-        Text(_getBookName(), style: TextStyle(
-          fontSize: 32.0,
-         )),   // fixme: needs beautify
+        _buildBookName(),   // fixme: needs beautify
         _progressBar(),
         _eventListView(),
-
 //        _addNoteButton(),
       ]),
       floatingActionButton: Column(
@@ -74,6 +66,18 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
             onPressed: () => _onAddNoteButtonClicked(context),
           )
         ],
+      ),
+    );
+  }
+
+  Widget _buildBookName() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 64),
+      child: Text(Model().getBookName(),
+        style: TextStyle(
+          fontSize: 32,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
@@ -97,6 +101,13 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
     );
   }
 
+  Widget _emptyInfo() {
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+        child: Text('你还没有添加笔记')
+    );
+  }
+
   Widget _eventListView() {
     return Container(
       height: 300,
@@ -107,7 +118,6 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
 //      shrinkWrap: true,
         itemBuilder: _buildEventListTile,
       ),
-
     );
   }
 
@@ -127,19 +137,13 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
       ),
     );
 
-
-
-
-    /**/
   }
 
-  Future<bool> _mockDatabase() async {
+  Future<bool> _prepareData() async {
     notes = await Model().getAllReadingNotes();
-    Model().setGoalType(Model.READ);
-    Model().setBookPages("32");
-    Model().setBookName("Test Book Name");
     return true;
   }
+
 
 
   Widget _addNoteButton() {
