@@ -27,6 +27,8 @@ dependencies:
   image_picker: ^0.4.10
   path_provider: ^0.4.1
   uuid: 1.0.3
+  wave: ^0.0.8
+  carousel_slider: ^1.0.1
 
 dev_dependencies:
   flutter_test:

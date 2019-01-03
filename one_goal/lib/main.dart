@@ -37,6 +37,8 @@ class MyApp extends StatelessWidget {
         '/readingnotedetailpage': (context) => ReadingNoteDetailPage(null),
         '/setting': (context) => Setting(),
         '/resultofreading': (context) => ResultOfReading(),
+        '/sleepingplanpage': (context) => Sleeping(),
+        '/weightingplanpage': (context) => Reading(),
       }
     );
   }

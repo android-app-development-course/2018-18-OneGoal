@@ -10,4 +10,9 @@ class Utilities {
     assert (hm.length == 2);
     return TimeOfDay(hour: int.parse(hm[0]), minute: int.parse(hm[1]));
   }
+
+  static double percentageMapping(double num, double total, double bias) {
+    var result = bias - num / total;
+    return result < 0 ? 0 : result;
+  }
 }

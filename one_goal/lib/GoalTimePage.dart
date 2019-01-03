@@ -132,11 +132,11 @@ class TimeState extends State<GoalTimePage> {
         pageName = "/readingplanpage";
         break;
       case Model.SLEEP:
-        pageName = "/unsupported";
-        break; // TODO: make it support
+        pageName = "/sleepingplanpage";
+        break;
       case Model.WEIGHT:
-        pageName = "/unsupported";
-        break; // TODO: make it support
+        pageName = "/weightingplanpage";
+        break;
     }
     Navigator.of(context)
         .pushNamedAndRemoveUntil(pageName, (Route route) => route == null);

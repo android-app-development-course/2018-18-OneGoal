@@ -3,6 +3,7 @@ import 'ModelReadingNote.dart';
 import 'Model.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class ReadingNoteDetailPage extends StatefulWidget {
   final int noteId;
@@ -15,6 +16,7 @@ class ReadingNoteDetailPage extends StatefulWidget {
 
 class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
   final int noteId;
+  bool dataLoaded = false;
   String _title = "";
   String _content = "";
   TextEditingController _titleCtrl = new TextEditingController();
@@ -43,9 +45,10 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
       future: _prepareData(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         ReadingNote note = snapshot.requireData;
-        if (note != null && note.id != null) {
+        if (note != null && note.id != null && !dataLoaded) {
           _titleCtrl.text = note.title;
           _contentCtrl.text = note.content;
+          dataLoaded = true;
         }
         return !snapshot.hasData ? Center(child: CircularProgressIndicator()) :
         Scaffold(
@@ -62,8 +65,8 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
                   _buildTitle('标题'),
                   _buildTitleTextField(),
                   _buildTitle('内容'),
-                  _buildContentTextField(),  // fixme: make a border
-                  // fixme: push confirm button to the bottom of screen
+                  _buildContentTextField(),
+//                   fixme: push confirm button to the bottom of screen
 //                  _buildPictureGallery(),
                   _buildImageBox(),
                   _buildConfirmButton(),
@@ -79,10 +82,13 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
   }
 
   Widget _buildTitle(String title) {
-    return Text(title,
-      style: TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
+    return Container(
+      padding: EdgeInsets.all(8.0),
+      child: Text(title,
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
@@ -92,7 +98,13 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
       padding: EdgeInsets.symmetric(horizontal: 32),
       child: TextField(
         controller: _titleCtrl,
-        //onChanged: (String str) => _titleCtrl.text = str,
+        onSubmitted: (String str) {
+          _titleCtrl.text = str;
+
+        },
+        decoration: InputDecoration(
+            border: OutlineInputBorder()
+        ),
       ),
     );
   }
@@ -115,8 +127,8 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
     return Center(
       child: GestureDetector(
         child: Container(
-          width: 200,
-          height: 200,
+          width: 100,
+          height: 100,
           child: _image == null ? Text('no image') : Image.file(_image),
         ),
         onTap: _image == null ? null : _onImageTapped),
@@ -126,13 +138,17 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
   void _onImageTapped() async {
     await showDialog(
         context: context,
-      child: Image.file(_image)
+      builder: (buildContext) {
+          return Dialog(
+            child: Image.file(_image),
+          );
+      },
     );
   }
 
   Widget _buildConfirmButton() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 18),
+      padding: EdgeInsets.all(18.0),
         child:
         Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           RaisedButton(
@@ -142,7 +158,7 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
             },
             color: Colors.grey,
             child: Text(
-              '确定添加',
+              noteId == null ? '确定添加' : '确定修改',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
@@ -153,16 +169,23 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
   }
 
   Widget _buildPictureGallery() {
-    return Container(
-      height: 30,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: 3,
-        itemBuilder: (context, index) {
-          return Text("test");
-          // TODO: feed images list data
-        },
-      ),
+    return new CarouselSlider(
+        items: [1,2,3,4,5].map((i) {
+          return new Builder(
+            builder: (BuildContext context) {
+              return new Container(
+                  width: MediaQuery.of(context).size.width,
+                  margin: new EdgeInsets.symmetric(horizontal: 5.0),
+                  decoration: new BoxDecoration(
+                      color: Colors.amber
+                  ),
+                  child: new Text('text $i', style: new TextStyle(fontSize: 16.0),)
+              );
+            },
+          );
+        }).toList(),
+        height: 150.0,
+        autoPlay: true
     );
   }
 
@@ -188,7 +211,5 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
   Future<ReadingNote> _prepareData() async {
     if (noteId == null) return new ReadingNote();
     return await Model().getReadingNote(noteId);
-    //_titleCtrl.text = note.title;
-    //_contentCtrl.text = note.content;
   }
 }

@@ -4,6 +4,9 @@ import 'ModelReadingNote.dart';
 import 'Model.dart';
 import 'ReadingNoteDetailPage.dart';
 import 'dart:math';
+import 'package:wave/wave.dart';
+import 'package:wave/config.dart';
+import 'Utilities.dart';
 
 class ReadingPlanPage extends StatefulWidget {
   @override
@@ -13,7 +16,7 @@ class ReadingPlanPage extends StatefulWidget {
 class _ReadingPlanState extends State<ReadingPlanPage> {
   List<ReadingNote> notes;
   double _sliderValue = 10.0;
-  int maxPage;
+  double maxPage;
 
   int _getBookPages() {
     return int.parse(Model().getBookPages());
@@ -74,7 +77,7 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
 
   Widget _buildBookName() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 64),
+      padding: const EdgeInsets.symmetric(vertical: 24),
       child: Text(
         Model().getBookName(),
         style: TextStyle(
@@ -111,14 +114,18 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
 
   Widget _eventListView() {
     return Container(
-      height: 300,
-      padding: EdgeInsets.symmetric(horizontal: 32),
+      height: 320,
+      margin: EdgeInsets.all(36),
+      decoration: BoxDecoration(
+        border: new Border.all(width: 2.0, color: Colors.black12)
+      ),
       child: ListView.builder(
-        padding: const EdgeInsets.all(16.0),
+        //padding: const EdgeInsets.all(16.0),
         itemCount: notes.length,
 //      itemExtent: 30,
 //      shrinkWrap: true,
         itemBuilder: _buildEventListTile,
+
       ),
     );
   }
@@ -142,6 +149,7 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
   Widget _buildBackground(Widget widget) {
     return Stack(
       children: [
+        _waveWidget(),
         Container(
           //height: 500,
 //          margin: EdgeInsets.only(bottom: 50),
@@ -149,19 +157,44 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
           alignment: Alignment.bottomCenter,
           //padding: EdgeInsets.symmetric(horizontal: 50),
           child: Slider(
-            min: 0.0,
-            max: maxPage.toDouble(),
-            value: _sliderValue,
-            onChanged: (newRating) {
-              setState(() => _sliderValue = newRating);
-              if (_sliderValue >= maxPage) {
-                _neverSatisfied();
-              }
-            }
-          ),
+              min: 0.0,
+              max: maxPage,
+              value: _sliderValue,
+              onChanged: (newRating) {
+                setState(() => _sliderValue = newRating);
+                if (_sliderValue >= maxPage) {
+                  _neverSatisfied();
+                }
+              }),
         ),
         widget,
       ],
+    );
+  }
+
+  Widget _waveWidget() {
+    var p = _sliderValue / maxPage;
+    List<double> percentages = [1 - p, 0.97 - p, 0.95 - p, 0.9 - p];
+    return WaveWidget(
+      config: CustomConfig(
+        gradients: [
+          [Colors.blue, Color(0xEE00A5C7)],
+          [Color(0xFF00C7F0), Color(0x554DE1FF)],
+          [Color(0xFF66C7F0), Color(0x5599EEFF)],
+          [Color(0xFF66E5FF), Color(0x5599EEFF)]
+        ],
+        durations: [35000, 19440, 10800, 6000],
+        heightPercentages: percentages,
+        blur: MaskFilter.blur(BlurStyle.solid, 10),
+        gradientBegin: Alignment.bottomLeft,
+        gradientEnd: Alignment.topRight,
+      ),
+      waveAmplitude: 0,
+      backgroundColor: Colors.white,
+      size: Size(
+        double.infinity,
+        double.infinity,
+      ),
     );
   }
 
@@ -183,8 +216,8 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
             FlatButton(
               child: Text('是'),
               onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(context,
-                    '/resultofreading', (Route route) => route == null);
+                Navigator.pushNamedAndRemoveUntil(context, '/resultofreading',
+                    (Route route) => route == null);
               },
             ),
             FlatButton(
@@ -201,7 +234,7 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
 
   Future<bool> _prepareData() async {
     notes = await Model().getAllReadingNotes();
-    maxPage = int.parse(await Model().getBookPages());
+    maxPage = double.parse(Model().getBookPages());
     return true;
   }
 }
