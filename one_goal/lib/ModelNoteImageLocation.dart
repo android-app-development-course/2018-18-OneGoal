@@ -56,6 +56,22 @@ class NoteImageLocationProvider {
     return note;
   }
 
+  Future delete(int noteId, String imagePath) async {
+    print("delete: " + imagePath);
+    await db.delete(tableNoteLoc,
+        where: "$columnNoteId = ? and $columnPath = ?",
+        whereArgs: [noteId, imagePath]
+    );
+  }
+
+  Future deleteAllOf(int noteId) async {
+    print("delete all of $noteId");
+    await db.delete(tableNoteLoc,
+      where: "$columnNoteId = ?",
+      whereArgs: [noteId]
+    );
+  }
+
   Future<List<NoteImageLocation>> getNoteImageLocations() async {
     List<Map> maps = await db.query(tableNoteLoc,
       columns: [columnId, columnNoteId, columnPath],
@@ -67,9 +83,10 @@ class NoteImageLocationProvider {
   Future<List<NoteImageLocation>> getNoteImageLocation(int id) async {
     List<Map> maps = await db.query(tableNoteLoc,
         columns: [columnId, columnNoteId, columnPath],
-        where: "$columnId = ?",
+        where: "$columnNoteId = ?",
         whereArgs: [id]
     );
+    print(maps);
     return NoteImageLocation.fromMaps(maps);
   }
 

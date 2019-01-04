@@ -64,6 +64,13 @@ class ReadingNoteProvider {
     return note;
   }
 
+  Future delete(ReadingNote note) async {
+    db.delete(tableNote,
+      where: "$columnId = ?",
+      whereArgs: [note.id]
+    );
+  }
+
   Future<List<ReadingNote>> getReadingNotes() async {
     List<Map> maps = await db.query(tableNote,
       columns: [columnId, columnTitle, columnContent, columnDate],

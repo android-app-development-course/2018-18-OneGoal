@@ -12,20 +12,16 @@ class ReadingNoteDetailPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => _ReadingNodeDetailState(noteId);
-
 }
 
 class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
   final int noteId;
   bool dataLoaded = false;
-  String _title = "";
-  String _content = "";
   TextEditingController _titleCtrl = new TextEditingController();
   TextEditingController _contentCtrl = new TextEditingController();
   Future<ReadingNote> readingNoteFuture;
   Future<List<File>> imagesFuture;
 
-  File _image;
   List<File> idImages = new List<File>();
 
   _ReadingNodeDetailState(this.noteId);
@@ -62,17 +58,10 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
     return FutureBuilder(
       future: _preparingData(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-//        Tuple2<ReadingNote, List<File>> tup = snapshot.requireData;
-//        ReadingNote note = tup.item1;
-//        if (note != null && note.id != null && !dataLoaded) {
-//          _titleCtrl.text = note.title;
-//          _contentCtrl.text = note.content;
-//          idImages = tup.item2;
-//          dataLoaded = true;
-//        }
         if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
         ReadingNote note = snapshot.data['readingNote'];
         List<File> images = snapshot.data['images'];
+        print("get images length: " + images.length.toString());
         if (note != null && note.id != null && !dataLoaded) {
           _titleCtrl.text = note.title;
           _contentCtrl.text = note.content;
@@ -151,27 +140,38 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
     );
   }
 
-  Widget _buildImageBox() {
-    return Center(
-      child: GestureDetector(
-        child: Container(
-          width: 100,
-          height: 100,
-          child: _image == null ? Text('no image') : Image.file(_image),
-        ),
-        onTap: _image == null ? null : _onImageTapped),
-    );
-  }
-
-  void _onImageTapped() async {
+  void _onImageTapped(int index) async {
     await showDialog(
         context: context,
       builder: (buildContext) {
           return Dialog(
-            child: Image.file(_image),
+            child: Container(
+              height: 400,
+              child: Stack(
+                children: <Widget>[
+                  Image.file(idImages[index]),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: FloatingActionButton(
+                      backgroundColor: Colors.transparent,
+                      foregroundColor: Colors.red,
+                      elevation: 0,
+                      child: Icon(Icons.delete),
+                    onPressed: () => _onPictureDeleteClicked(idImages[index]),
+                  )),
+                ],
+              ),
+            ),
+
           );
       },
     );
+  }
+
+  void _onPictureDeleteClicked(File image) {
+    setState(() => idImages.remove(image));
+    Model().deleteImage(noteId, image);
+    Navigator.pop(context);
   }
 
   Widget _buildConfirmButton() {
@@ -199,22 +199,27 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
   Widget _buildPictureGallery() {
     if (idImages.isEmpty) return Center(child: Text('No image'));
     else return new CarouselSlider(
+        viewportFraction: _dynamicViewportFraction(idImages.length),
+
         items: new List<int>.generate(idImages.length, (id) => id).map((i) {
           return new Builder(
             builder: (BuildContext context) {
               return new Container(
                   width: MediaQuery.of(context).size.width,
-                  margin: new EdgeInsets.symmetric(horizontal: 5.0),
+                  margin: new EdgeInsets.all(5.0),
 //                  decoration: new BoxDecoration(
 //                      color: Colors.amber
 //                  ),
 //                  child: new Text('text $i', style: new TextStyle(fontSize: 16.0),)
-                  child: Image.file(idImages[i]),
+                  child: GestureDetector(
+                    child: Image.file(idImages[i]),
+                    onTap: () => _onImageTapped(i),
+                  ),
               );
             },
           );
         }).toList(),
-        height: 150.0,
+        height: 120.0,
         autoPlay: true
     );
   }
@@ -223,6 +228,7 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
     getImage();
   }
 
+
   void _confirmAddNoteButtonPressed(BuildContext context) async {
     var newNote = new ReadingNote(
         title: _titleCtrl.text,
@@ -230,19 +236,17 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
     );
     if (noteId == null) {
       var id = await Model().insertReadingNote(newNote);
-      Model().saveImages(id, [_image]);
+      Model().saveImages(id, idImages);
     } else {
       newNote.id = noteId;
       Model().updateReadingNote(newNote);
-      Model().saveImages(noteId, [_image]);
+      Model().saveImages(noteId, idImages);
     }
 
     Navigator.pop(context);
   }
 
-  Future<Tuple2<ReadingNote, List<File>>> _prepareData() async {
-    var notes = await Model().getReadingNote(noteId);
-    var images = await Model().loadImages(noteId);
-    return Tuple2<ReadingNote, List<File>>(notes, images);
+  double _dynamicViewportFraction(int imageNum) {
+    return imageNum < 3 ? 0.8 : 0.3;
   }
 }

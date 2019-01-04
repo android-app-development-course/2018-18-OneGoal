@@ -174,6 +174,13 @@ class Model {
     return await readingNoteProvider.update(note);
   }
 
+  Future deleteReadingNote(ReadingNote note) async {
+    List<File> images = await loadImages(note.id);
+    images.forEach((f) => f.delete());
+    readingNoteProvider.delete(note);
+    noteImageLocationProvider.deleteAllOf(note.id);
+  }
+
   Future saveImages(int noteId, List<File> images) async {
     for (var i = 0; i != images.length; ++i) {
       String path = '${directory.path}/${uuid.v1()}.jpg';
@@ -205,6 +212,16 @@ class Model {
       fileList.add(imgFile);
     });
     return fileList;
+  }
+
+  void deleteImage(int noteId, File image) {
+    var path = image.path;
+    image.delete();
+    noteImageLocationProvider.delete(noteId, path);
+  }
+
+  void deleteAllImages(int noteId) {
+
   }
 
   // -------------- Reading plan data access end ------------

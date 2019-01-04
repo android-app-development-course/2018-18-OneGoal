@@ -6,6 +6,7 @@ import 'ReadingNoteDetailPage.dart';
 import 'dart:math';
 import 'package:wave/wave.dart';
 import 'package:wave/config.dart';
+import 'package:flutter/foundation.dart';
 import 'Utilities.dart';
 
 class ReadingPlanPage extends StatefulWidget {
@@ -131,16 +132,29 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
   }
 
   Widget _buildEventListTile(BuildContext context, int index) {
+    var item = notes[index];
     return new Container(
       child: new Column(
         children: <Widget>[
-          new Divider(),
-          ListTile(
-            leading: Icon(Icons.done),
-            title: Text(notes[index].title),
-            trailing: Icon(Icons.arrow_forward_ios),
-            onTap: () => _onNoteTileTapped(context, index),
+          Dismissible(
+            key: new Key(item.id.toString()),
+            child: ListTile(
+              leading: Icon(Icons.done),
+              title: Text(item.title),
+              trailing: Icon(Icons.arrow_forward_ios),
+              onTap: () => _onNoteTileTapped(context, index),
+            ),
+            onDismissed: (direction) {
+              notes.removeAt(index);
+              Model().deleteReadingNote(item);
+              Scaffold.of(context).showSnackBar(
+                new SnackBar(content: Text("${item.title} dismissed."))
+              );
+            },
+            background: new Container(color: Colors.red,),
           ),
+
+          new Divider(),
         ],
       ),
     );
