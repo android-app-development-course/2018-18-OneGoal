@@ -34,14 +34,13 @@ class NoteImageLocation {
 
   static List<NoteImageLocation> fromMaps(List<Map<String, dynamic>> maps) {
     var newList = new List<NoteImageLocation>();
-    for (var i = 0; i != maps.length; ++i) {
+    maps.forEach((singleMap) {
       var note = new NoteImageLocation();
-      var singleMap = maps[i];
       note.id = singleMap[columnId];
       note.noteId = singleMap[columnNoteId];
       note.path = singleMap[columnPath];
       newList.add(note);
-    }
+    });
     return newList;
   }
 }
@@ -52,29 +51,26 @@ class NoteImageLocationProvider {
   NoteImageLocationProvider(this.db);
 
   Future<NoteImageLocation> insert(NoteImageLocation note) async {
+    print("insert: " + note.path);
     note.id = await db.insert(tableNoteLoc, note.toMap());
     return note;
   }
 
   Future<List<NoteImageLocation>> getNoteImageLocations() async {
     List<Map> maps = await db.query(tableNoteLoc,
-      columns: [columnId, columnNoteId, columnNoteId],
+      columns: [columnId, columnNoteId, columnPath],
       where: null,
     );
-    if (maps.length > 0) {
-      return NoteImageLocation.fromMaps(maps);
-    }
-    return List<NoteImageLocation>();
+    return NoteImageLocation.fromMaps(maps);
   }
 
-  Future<NoteImageLocation> getNoteImageLocation(int id) async {
+  Future<List<NoteImageLocation>> getNoteImageLocation(int id) async {
     List<Map> maps = await db.query(tableNoteLoc,
-        columns: [columnId, columnNoteId, columnNoteId],
+        columns: [columnId, columnNoteId, columnPath],
         where: "$columnId = ?",
         whereArgs: [id]
     );
-    if (maps.length > 0) return NoteImageLocation.fromMap(maps.first);
-    return null;
+    return NoteImageLocation.fromMaps(maps);
   }
 
   Future<int> update(NoteImageLocation note) async {

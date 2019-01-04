@@ -4,6 +4,7 @@ import 'Model.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:tuple/tuple.dart';
 
 class ReadingNoteDetailPage extends StatefulWidget {
   final int noteId;
@@ -21,15 +22,32 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
   String _content = "";
   TextEditingController _titleCtrl = new TextEditingController();
   TextEditingController _contentCtrl = new TextEditingController();
+  Future<ReadingNote> readingNoteFuture;
+  Future<List<File>> imagesFuture;
 
   File _image;
+  List<File> idImages = new List<File>();
 
   _ReadingNodeDetailState(this.noteId);
 
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
-    print(image.path);
-    setState(() => _image = image);
+    setState(() => idImages.add(image));
+  }
+
+  @override
+  void initState() {
+    // get all future
+    readingNoteFuture = Model().getReadingNote(noteId);
+    imagesFuture = Model().loadImages(noteId);
+    super.initState();
+  }
+
+  Future<Map<String, dynamic>> _preparingData() async {
+    var map = new Map<String, dynamic>();
+    map['readingNote'] = await readingNoteFuture;
+    map['images'] = await imagesFuture;
+    return map;
   }
 
   @override
@@ -42,16 +60,26 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _prepareData(),
+      future: _preparingData(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        ReadingNote note = snapshot.requireData;
+//        Tuple2<ReadingNote, List<File>> tup = snapshot.requireData;
+//        ReadingNote note = tup.item1;
+//        if (note != null && note.id != null && !dataLoaded) {
+//          _titleCtrl.text = note.title;
+//          _contentCtrl.text = note.content;
+//          idImages = tup.item2;
+//          dataLoaded = true;
+//        }
+        if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+        ReadingNote note = snapshot.data['readingNote'];
+        List<File> images = snapshot.data['images'];
         if (note != null && note.id != null && !dataLoaded) {
           _titleCtrl.text = note.title;
           _contentCtrl.text = note.content;
+          idImages = images;
           dataLoaded = true;
         }
-        return !snapshot.hasData ? Center(child: CircularProgressIndicator()) :
-        Scaffold(
+        return Scaffold(
           resizeToAvoidBottomPadding: false,
           appBar: AppBar(
             backgroundColor: Colors.grey,
@@ -67,8 +95,8 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
                   _buildTitle('内容'),
                   _buildContentTextField(),
 //                   fixme: push confirm button to the bottom of screen
-//                  _buildPictureGallery(),
-                  _buildImageBox(),
+                  _buildPictureGallery(),
+//                  _buildImageBox(),
                   _buildConfirmButton(),
                 ],
               )),
@@ -169,17 +197,19 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
   }
 
   Widget _buildPictureGallery() {
-    return new CarouselSlider(
-        items: [1,2,3,4,5].map((i) {
+    if (idImages.isEmpty) return Center(child: Text('No image'));
+    else return new CarouselSlider(
+        items: new List<int>.generate(idImages.length, (id) => id).map((i) {
           return new Builder(
             builder: (BuildContext context) {
               return new Container(
                   width: MediaQuery.of(context).size.width,
                   margin: new EdgeInsets.symmetric(horizontal: 5.0),
-                  decoration: new BoxDecoration(
-                      color: Colors.amber
-                  ),
-                  child: new Text('text $i', style: new TextStyle(fontSize: 16.0),)
+//                  decoration: new BoxDecoration(
+//                      color: Colors.amber
+//                  ),
+//                  child: new Text('text $i', style: new TextStyle(fontSize: 16.0),)
+                  child: Image.file(idImages[i]),
               );
             },
           );
@@ -193,23 +223,26 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
     getImage();
   }
 
-  void _confirmAddNoteButtonPressed(BuildContext context) {
+  void _confirmAddNoteButtonPressed(BuildContext context) async {
     var newNote = new ReadingNote(
         title: _titleCtrl.text,
         content: _contentCtrl.text
     );
     if (noteId == null) {
-      Model().insertReadingNote(newNote);
+      var id = await Model().insertReadingNote(newNote);
+      Model().saveImages(id, [_image]);
     } else {
       newNote.id = noteId;
       Model().updateReadingNote(newNote);
+      Model().saveImages(noteId, [_image]);
     }
 
     Navigator.pop(context);
   }
 
-  Future<ReadingNote> _prepareData() async {
-    if (noteId == null) return new ReadingNote();
-    return await Model().getReadingNote(noteId);
+  Future<Tuple2<ReadingNote, List<File>>> _prepareData() async {
+    var notes = await Model().getReadingNote(noteId);
+    var images = await Model().loadImages(noteId);
+    return Tuple2<ReadingNote, List<File>>(notes, images);
   }
 }

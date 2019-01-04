@@ -29,6 +29,7 @@ dependencies:
   uuid: 1.0.3
   wave: ^0.0.8
   carousel_slider: ^1.0.1
+  tuple: ^1.0.2
 
 dev_dependencies:
   flutter_test:

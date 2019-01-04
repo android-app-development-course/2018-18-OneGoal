@@ -154,8 +154,9 @@ class Model {
     _sharedPreferences.setString(CURRENT_BOOK_PAGES, bookPages);
   }
 
-  void insertReadingNote(ReadingNote note) {
-    readingNoteProvider.insert(note);  // TODO: synchronize
+  Future<int> insertReadingNote(ReadingNote note) async {
+    var res = await readingNoteProvider.insert(note);
+    return res.id;
   }
 
   Future<List<ReadingNote>> getAllReadingNotes() async {
@@ -164,6 +165,7 @@ class Model {
   }
 
   Future<ReadingNote> getReadingNote(int id) async {
+    if (id == null) return new ReadingNote();
     var result = await readingNoteProvider.getReadingNote(id);
     return result;
   }
@@ -174,7 +176,7 @@ class Model {
 
   Future saveImages(int noteId, List<File> images) async {
     for (var i = 0; i != images.length; ++i) {
-      String path = '$directory.path/${uuid.v1()}';
+      String path = '${directory.path}/${uuid.v1()}.jpg';
       images[i].copy(path);
       var imgLoc = new NoteImageLocation(noteId: noteId, path: path);
       noteImageLocationProvider.insert(imgLoc);
@@ -182,12 +184,26 @@ class Model {
   }
 
   Future<List<File>> loadImages(int noteId) async {
+    print(noteId);
+    if (noteId == null) return new List<File>();
+    List<NoteImageLocation> locs =
+      await noteImageLocationProvider.getNoteImageLocation(noteId);
+    print("locs.length: " + locs.length.toString());
+    var fileList = new List<File>();
+    locs.forEach((loc) {
+      File imgFile = File(loc.path);
+      fileList.add(imgFile);
+    });
+    return fileList;
+  }
+
+  Future<List<File>> loadAllImages() async {
     List<NoteImageLocation> locs = await noteImageLocationProvider.getNoteImageLocations();
     var fileList = new List<File>();
-    for (int i = 0; i != locs.length; ++i) {
-      File imgFile = File(locs[i].path);
+    locs.forEach((loc) {
+      File imgFile = File(loc.path);
       fileList.add(imgFile);
-    }
+    });
     return fileList;
   }
 
