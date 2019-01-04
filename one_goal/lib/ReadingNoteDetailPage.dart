@@ -4,7 +4,6 @@ import 'Model.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:tuple/tuple.dart';
 
 class ReadingNoteDetailPage extends StatefulWidget {
   final int noteId;
@@ -28,7 +27,7 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
 
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
-    setState(() => idImages.add(image));
+    if (image != null) setState(() => idImages.add(image));
   }
 
   @override
@@ -144,33 +143,30 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
     await showDialog(
         context: context,
       builder: (buildContext) {
-          return Dialog(
-            child: Container(
-              height: 400,
-              child: Stack(
-                children: <Widget>[
-                  Image.file(idImages[index]),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: FloatingActionButton(
-                      backgroundColor: Colors.transparent,
-                      foregroundColor: Colors.red,
-                      elevation: 0,
-                      child: Icon(Icons.delete),
+          return Stack(
+            children: <Widget>[
+              Dialog(
+                child: Image.file(idImages[index]),
+              ),
+              Container(
+                  alignment: Alignment.bottomRight,
+                  margin: EdgeInsets.only(right: 16, bottom: 16),
+                  child: FloatingActionButton(
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.red,
+                    elevation: 0,
+                    child: Icon(Icons.delete_forever),
                     onPressed: () => _onPictureDeleteClicked(idImages[index]),
                   )),
-                ],
-              ),
-            ),
-
+            ],
           );
       },
     );
   }
 
-  void _onPictureDeleteClicked(File image) {
+  void _onPictureDeleteClicked(File image) async {
     setState(() => idImages.remove(image));
-    Model().deleteImage(noteId, image);
+    await Model().deleteImage(noteId, image);
     Navigator.pop(context);
   }
 
@@ -242,8 +238,8 @@ class _ReadingNodeDetailState extends State<ReadingNoteDetailPage> {
       Model().updateReadingNote(newNote);
       Model().saveImages(noteId, idImages);
     }
-
-    Navigator.pop(context);
+    Navigator.pushNamedAndRemoveUntil(context, "/readingplanpage",
+            (Route r) => r == null);
   }
 
   double _dynamicViewportFraction(int imageNum) {

@@ -33,7 +33,7 @@ class SplashPageState extends State<SplashPage> {
     super.initState();
     hasInitialized = Model().hasInitialized();
     //开启倒计时
-    var duration = Duration(seconds: 3);
+    var duration = Duration(seconds: 2);
     new Future.delayed(duration, goToHomePage);
   }
 

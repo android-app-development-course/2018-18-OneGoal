@@ -177,8 +177,8 @@ class Model {
   Future deleteReadingNote(ReadingNote note) async {
     List<File> images = await loadImages(note.id);
     images.forEach((f) => f.delete());
-    readingNoteProvider.delete(note);
-    noteImageLocationProvider.deleteAllOf(note.id);
+    await readingNoteProvider.delete(note);
+    await noteImageLocationProvider.deleteAllOf(note.id);
   }
 
   Future saveImages(int noteId, List<File> images) async {
@@ -214,10 +214,10 @@ class Model {
     return fileList;
   }
 
-  void deleteImage(int noteId, File image) {
+  Future deleteImage(int noteId, File image) async {
     var path = image.path;
     image.delete();
-    noteImageLocationProvider.delete(noteId, path);
+    await noteImageLocationProvider.delete(noteId, path);
   }
 
   void deleteAllImages(int noteId) {

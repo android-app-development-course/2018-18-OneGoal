@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:one_goal/Setting.dart';
 import 'ModelReadingNote.dart';
 import 'Model.dart';
 import 'ReadingNoteDetailPage.dart';
-import 'dart:math';
 import 'package:wave/wave.dart';
 import 'package:wave/config.dart';
 import 'package:flutter/foundation.dart';
-import 'Utilities.dart';
 
 class ReadingPlanPage extends StatefulWidget {
   @override
@@ -16,15 +13,15 @@ class ReadingPlanPage extends StatefulWidget {
 
 class _ReadingPlanState extends State<ReadingPlanPage> {
   List<ReadingNote> notes;
-  double _sliderValue = 10.0;
+  double _sliderValue;
   double maxPage;
+  bool dataLoaded = false;
+  Future<List<ReadingNote>> readingNoteFuture;
 
-  int _getBookPages() {
-    return int.parse(Model().getBookPages());
-  }
-
-  int _getCurrentPage() {
-    return int.parse(Model().getCurrentBookPages());
+  @override
+  void initState() {
+    readingNoteFuture = Model().getAllReadingNotes();
+    super.initState();
   }
 
   @override
@@ -32,14 +29,19 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
     return new FutureBuilder(
         future: _prepareData(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          return snapshot.hasData
-              ? _scaffold()
-              : Center(
-                  child: Text(
-                  snapshot.toString(),
-                  style: TextStyle(fontSize: 10),
-                ) // TODO: change to progress bar
-                  );
+          if (!snapshot.hasData) return Center(
+              child: Text(
+                snapshot.toString(),
+                style: TextStyle(fontSize: 10),
+              )); // TODO: change to progress bar
+          if (!dataLoaded) {
+            _sliderValue = _getCurrentPage().toDouble();
+            maxPage = double.parse(Model().getBookPages());
+            notes = snapshot.data;
+            dataLoaded = true;
+          }
+
+          return _scaffold();
         });
   }
 
@@ -61,8 +63,7 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
       body: _buildBackground(Column(children: [
         _buildBookName(), // fixme: needs beautify
         _progressBar(),
-        _eventListView(),
-//        _addNoteButton(),
+        notes.isEmpty ? _emptyInfo() : _eventListView(),
       ])),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -78,14 +79,22 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
 
   Widget _buildBookName() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 24),
-      child: Text(
-        Model().getBookName(),
-        style: TextStyle(
-          fontSize: 32,
-          fontWeight: FontWeight.bold,
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: RaisedButton(
+          onPressed: () {},
+        color: Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Container(
+          padding: EdgeInsets.only(left: 64, right: 64, top: 8, bottom: 16),
+          child: Text(
+            Model().getBookName(),
+            style: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
-      ),
+      )
     );
   }
 
@@ -110,7 +119,7 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
 
   Widget _emptyInfo() {
     return Container(
-        padding: const EdgeInsets.all(16.0), child: Text('你还没有添加笔记'));
+        padding: const EdgeInsets.all(16.0), child: Text('你还没有添加笔记，点击右下角添加'));
   }
 
   Widget _eventListView() {
@@ -144,14 +153,19 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
               trailing: Icon(Icons.arrow_forward_ios),
               onTap: () => _onNoteTileTapped(context, index),
             ),
-            onDismissed: (direction) {
-              notes.removeAt(index);
-              Model().deleteReadingNote(item);
+            onDismissed: (direction) async {
+              await Model().deleteReadingNote(item);
+              setState(() => notes.removeAt(index));
               Scaffold.of(context).showSnackBar(
                 new SnackBar(content: Text("${item.title} dismissed."))
               );
+//              notes.removeAt(index);
+              //dataLoaded = false;
+
             },
-            background: new Container(color: Colors.red,),
+            background: new Container(
+              color: Colors.red,
+            ),
           ),
 
           new Divider(),
@@ -179,7 +193,11 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
                 if (_sliderValue >= maxPage) {
                   _neverSatisfied();
                 }
-              }),
+              },
+              onChangeEnd: (value) =>
+                Model().setCurrentBookPages(value.floor().toString()),
+          ),
+
         ),
         widget,
       ],
@@ -246,9 +264,15 @@ class _ReadingPlanState extends State<ReadingPlanPage> {
     );
   }
 
-  Future<bool> _prepareData() async {
-    notes = await Model().getAllReadingNotes();
-    maxPage = double.parse(Model().getBookPages());
-    return true;
+  Future<List<ReadingNote>> _prepareData() async {
+    return await readingNoteFuture;
+  }
+
+  int _getBookPages() {
+    return int.parse(Model().getBookPages());
+  }
+
+  int _getCurrentPage() {
+    return int.parse(Model().getCurrentBookPages());
   }
 }
